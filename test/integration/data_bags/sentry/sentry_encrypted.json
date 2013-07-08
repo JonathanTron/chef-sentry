@@ -1,0 +1,27 @@
+{
+  "id": "wal_e_encrypted",
+  "secret_access_key": {
+    "encrypted_data": "fQLAQO4WvI9IXIkIUCTYtB5YGDGBHrJ3ovuZsAaBktQqOclsQs9ME9FWA0xN\nlLwU\n",
+    "iv": "9mR/tkpYDHg5VYC4s8tRsQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "access_key_id": {
+    "encrypted_data": "7nQn2PoNMS9US3/ihnbm1o54yCc29njylS5xJza6fihDye8PEyr8mpAg2MSR\nqXpH\n",
+    "iv": "PUnbZp5Ca5xXijA6PJnE5g==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "bucket": {
+    "encrypted_data": "zFIA4Vy9bSwW97zBTidBnggESCL8uqxfRdPDsnKlg3Y=\n",
+    "iv": "Zd7E8XkIooYrROyL+B8idg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "gpg_key_id": {
+    "encrypted_data": "cEJQrdAUD5ebICvK39YdyZbr6x7mqFcHNCAGfP439Jo=\n",
+    "iv": "/OJH7L212Tdpgktw+5dNgw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}
