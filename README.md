@@ -113,7 +113,7 @@ Attributes
     <td><tt>['sentry']['config']['web_host']</tt></td>
     <td>String</td>
     <td>IP to which sentry is listening</td>
-    <td><tt>"0.0.0.0"</tt></td>
+    <td><tt>"127.0.0.1"</tt></td>
   </tr>
   <tr>
     <td><tt>['sentry']['config']['web_port']</tt></td>
