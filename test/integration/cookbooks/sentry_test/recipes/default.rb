@@ -17,9 +17,33 @@
 # limitations under the License.
 #
 
+include_recipe "apt"
+
 node.override["postgresql"]["password"]["postgres"] = "test"
 
 include_recipe "postgresql::client"
+include_recipe "postgresql::ruby" # So that postgresql tests pass...
 include_recipe "postgresql::server"
+
+package "postfix"
+node.override["sentry"]["config"]["email_default_from"] = "sentry@example.com"
+
+bash "create-sentry-role" do
+  user "postgres"
+  code <<-EOH
+echo "CREATE ROLE sentry LOGIN ENCRYPTED PASSWORD 'sentry';" | psql
+  EOH
+  action :run
+  not_if "psql -At -F ' ' -c '\du' | egrep --quiet '^sentry '", user: "postgres"
+end
+
+bash "create-sentry-database" do
+  user "postgres"
+  code <<-EOH
+createdb -E UTF-8 -O sentry sentry
+  EOH
+  action :run
+  not_if "psql -At -F ' ' -l | egrep --quiet '^sentry '", user: "postgres"
+end
 
 include_recipe "sentry::default"

@@ -76,34 +76,62 @@ directory node["sentry"]["config_dir"] do
   action :create
 end
 
-db_engine = case sentry_config["database_engine"]
-when "postgresql"
-  "django.db.backends.postgresql_psycopg2"
-when "mysql"
-  "django.db.backends.mysql"
-end
-
 template node["sentry"]["config_file_path"] do
   source "sentry.conf.py.erb"
   owner sentry_user
   group sentry_group
   mode "750"
   variables({
-    db_engine: db_engine,
+    db_engine: node["sentry"]["config"]["db_engine"],
     db_name: sentry_config["database_name"],
     db_user: sentry_config["database_user"],
     db_password: sentry_config["database_password"],
     db_host: sentry_config["database_host"],
     db_port: sentry_config["database_port"],
+    db_options: node["sentry"]["config"]["db_options"],
     signing_token: sentry_config["signing_token"],
+    public: node["sentry"]["config"]["public"],
+    allow_registration: node["sentry"]["config"]["allow_registration"],
     url_prefix: node["sentry"]["config"]["url_prefix"].sub(/(\/)+\z/, ""),
     web_host: node["sentry"]["config"]["web_host"],
     web_port: node["sentry"]["config"]["web_port"],
     web_options: node["sentry"]["config"]["web_options"],
+    email_default_from: node["sentry"]["config"]["email_default_from"],
+    email_backend: node["sentry"]["config"]["email_backend"],
     email_host: node["sentry"]["config"]["email_host"],
     email_port: node["sentry"]["config"]["email_port"],
     email_user: sentry_config["email_host_user"],
     email_password: sentry_config["email_port_port"],
     email_use_tls: node["sentry"]["config"]["email_use_tls"],
+    email_subject_prefix: node["sentry"]["config"]["email_subject_prefix"],
+    additional_apps: Array(node["sentry"]["config"]["additional_apps"]),
+    prepend_middleware_classes: Array(node["sentry"]["config"]["prepend_middleware_classes"]),
+    append_middleware_classes: Array(node["sentry"]["config"]["append_middleware_classes"]),
   })
+end
+
+execute "sentry DB upgrade" do
+  command "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} upgrade --noinput"
+  user sentry_user
+  group sentry_group
+  action :run
+end
+
+initial_admin_json = "#{node["sentry"]["config_dir"]}/initial_admin.json"
+template initial_admin_json do
+  source "initial_admin.json.erb"
+  owner sentry_user
+  group sentry_group
+  mode  "0600"
+  variables({
+    username: sentry_config["admin_username"],
+    password: sentry_config["admin_password"],
+    email: sentry_config["admin_email"]
+  })
+end
+
+execute "create initial admin" do
+  command "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
+  action :nothing
+  subscribes :run, "template[#{initial_admin_json}]", :immediately
 end

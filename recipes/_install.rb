@@ -19,10 +19,26 @@
 
 include_recipe "python"
 
+sentry_user = node["sentry"]["user"]
+sentry_group = node["sentry"]["group"]
+
+group sentry_group
+
+user sentry_user do
+  group sentry_group
+  home node["sentry"]["install_dir"]
+  action [:create, :manage]
+end
+
+directory node["sentry"]["install_dir"] do
+  owner sentry_user
+  group sentry_group
+end
+
 # Create a virtualenv for sentry
 python_virtualenv node["sentry"]["install_dir"] do
-  owner node["sentry"]["user"]
-  group node["sentry"]["group"]
+  owner sentry_user
+  group sentry_group
   action :create
 end
 
@@ -30,6 +46,8 @@ end
 python_pip node["sentry"]["pipname"] do
   virtualenv node["sentry"]["install_dir"]
   version node["sentry"]["version"]
+  user sentry_user
+  group sentry_group
 end
 
 # Install additional plugins via pip in virtualenv
@@ -39,5 +57,7 @@ node["sentry"]["plugins"].each do |plugin|
   python_pip plugin_name do
     virtualenv node["sentry"]["install_dir"]
     version plugin_version
+    user sentry_user
+    group sentry_group
   end
 end

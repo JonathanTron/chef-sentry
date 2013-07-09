@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: wal-e_test
+# Cookbook Name:: sentry_test
 # Recipe:: encrypted_data_bag
 #
 # Copyright 2013, Openhood S.E.N.C.
@@ -17,7 +17,35 @@
 # limitations under the License.
 #
 
-# We assume the postgresql group was already created
-group "postgres"
+include_recipe "apt"
 
-include_recipe "wal-e::default"
+node.override["postgresql"]["password"]["postgres"] = "test"
+
+include_recipe "postgresql::client"
+include_recipe "postgresql::ruby" # So that postgresql tests pass...
+include_recipe "postgresql::server"
+
+package "postfix"
+node.override["sentry"]["config"]["email_default_from"] = "sentry@example.com"
+node.override["sentry"]["data_bag_item"] = "sentry_encrypted"
+node.override["sentry"]["use_encrypted_data_bag"] = true
+
+bash "create-sentry-role" do
+  user "postgres"
+  code <<-EOH
+echo "CREATE ROLE sentry LOGIN ENCRYPTED PASSWORD 'sentry';" | psql
+  EOH
+  action :run
+  not_if "psql -At -F ' ' -c '\du' | egrep --quiet '^sentry '", user: "postgres"
+end
+
+bash "create-sentry-database" do
+  user "postgres"
+  code <<-EOH
+createdb -E UTF-8 -O sentry sentry
+  EOH
+  action :run
+  not_if "psql -At -F ' ' -l | egrep --quiet '^sentry '", user: "postgres"
+end
+
+include_recipe "sentry::default"

@@ -19,6 +19,12 @@
 
 include_recipe "runit"
 
+pip_subscribes = ["python_pip[#{node["sentry"]["pipname"]}]"] +
+  node["sentry"]["plugins"].map do |plugin|
+    plugin_name, _ = plugin
+    "python_pip[#{plugin_name}]"
+  end
+
 runit_service "sentry" do
   options({
     virtualenv_activate: "#{node["sentry"]["install_dir"]}/bin/activate",
@@ -29,4 +35,8 @@ runit_service "sentry" do
     config_path: node["sentry"]["config_file_path"],
   })
   action [:enable, :start]
+  subscribes :restart, "template[#{node["sentry"]["config_file_path"]}]", :delayed
+  pip_subscribes.each do |res|
+    subscribes :restart, res, :delayed
+  end
 end

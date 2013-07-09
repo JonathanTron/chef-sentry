@@ -4,49 +4,64 @@ describe 'sentry_test::default' do
 
   include Helpers::SentryTest
 
-  # "id": "credentials",
-  # "admin_user_name": "admin",
-  # "admin_password": "admin",
-  # "database_engine": "postgresql",
-  # "database_name": "sentry",
-  # "database_user": "sentry",
-  # "database_password": "sentry",
-  # "database_host": "localhost",
-  # "database_port": "5432",
-  # "database_options": {},
-  # "signing_token": "zn49392xhsdkjLas298sd8",
-  # "email_host_user": "",
-  # "email_host_password": "",
-  # "additional_env_vars": {}
-
   describe "Sentry configuration" do
     subject{ file("/opt/sentry/etc/config.py") }
-    it "creates configuration" do
+
+    it "is created" do
       subject.must_exist
     end
 
-    # it "sets AWS_SECRET_ACCESS_KEY" do
-    #   file("/etc/wal-e.d/env/AWS_SECRET_ACCESS_KEY").must_include "a_big_secret"
-    # end
+    it "is owned by sentry user" do
+      subject.must_have(:owner, node["sentry"]["user"])
+    end
 
-    # it "sets AWS_ACCESS_KEY_ID" do
-    #   file("/etc/wal-e.d/env/AWS_ACCESS_KEY_ID").must_include "Eve"
-    # end
+    it "is owned by sentry group" do
+      subject.must_have(:group, node["sentry"]["group"])
+    end
 
-    # it "sets WALE_S3_PREFIX" do
-    #   file("/etc/wal-e.d/env/WALE_S3_PREFIX").must_include(
-    #     "s3://postgresql-backup/#{node[:fqdn]}/wal-e"
-    #   )
-    # end
+    it "sets database engine based on node config" do
+      subject.must_include "'ENGINE': 'django.db.backends.postgresql_psycopg2',"
+    end
 
-    # it "sets WALE_GPG_KEY_ID" do
-    #   ::File.size(file("/etc/wal-e.d/env/WALE_GPG_KEY_ID").path).must_equal 0
-    # end
+    it "sets database name based on data bag" do
+      subject.must_include "'NAME': 'sentry',"
+    end
 
-    # it "does not set boto (Python's S3 library) default host in config" do
-    #   file("/etc/boto.cfg").wont_exist
-    # end
+    it "sets database user based on data bag" do
+      subject.must_include "'USER': 'sentry',"
+    end
 
+    it "sets database password based on data bag" do
+      subject.must_include "'PASSWORD': 'sentry',"
+    end
+
+    it "sets database host based on data bag" do
+      subject.must_include "'HOST': 'localhost',"
+    end
+
+    it "sets database port based on data bag" do
+      subject.must_include "'PORT': '5432',"
+    end
+
+    it "sets database options based on node config" do
+      subject.must_include "'OPTIONS': {'autocommit': True}"
+    end
+
+    it "sets signing token based on data bag" do
+      subject.must_include "SENTRY_KEY = 'zn49392xhzn49392xhsdkjsdkjLas298sd8Las298sd8'"
+    end
+
+    it "sets sentry url prefix based on node config" do
+      subject.must_include "SENTRY_URL_PREFIX = 'http://localhost:9000'"
+    end
+
+    it "sets sentry defaut from for email based on node config" do
+      subject.must_include "SENTRY_SERVER_EMAIL = '#{node["sentry"]["config"]["email_default_from"]}'"
+    end
+  end
+
+  it "starts sentry service" do
+    service("sentry").must_be_running
   end
 
 end

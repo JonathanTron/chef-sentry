@@ -47,7 +47,7 @@ Attributes
       ]
       ```
     </td>
-    <td><tt>[]</tt></td>
+    <td><tt>["django-secure", "django-bcrypt"]</tt></td>
   </tr>
   <tr>
     <td><tt>['sentry']['user']</tt></td>
@@ -98,6 +98,18 @@ Attributes
     <td><tt>"http://localhost"</tt></td>
   </tr>
   <tr>
+    <td><tt>['sentry']['config']['db_engine']</tt></td>
+    <td>String</td>
+    <td>Django class to use to connect to database</td>
+    <td><tt>"django.db.backends.postgresql_psycopg2"</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['sentry']['config']['db_options']</tt></td>
+    <td>Hash</td>
+    <td>OPTIONS passed to database config</td>
+    <td><tt>{autocommit: true}</tt></td>
+  </tr>
+  <tr>
     <td><tt>['sentry']['config']['web_host']</tt></td>
     <td>String</td>
     <td>IP to which sentry is listening</td>
@@ -116,6 +128,36 @@ Attributes
     <td><tt>{"workers": 3, secure_scheme_headers: {"X-FORWARDED-PROTO": 'https'}}</tt></td>
   </tr>
   <tr>
+    <td><tt>['sentry']['config']['additional_apps']</tt></td>
+    <td>Array</td>
+    <td>additional apps to append to INSTALLED_APPS</td>
+    <td><tt>["djangosecure", "django_bcrypt"]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['sentry']['config']['prepend_middleware_classes']</tt></td>
+    <td>Array</td>
+    <td>additional middlewares classes to prepend to MIDDLEWARE_CLASSES</td>
+    <td><tt>["djangosecure.middleware.SecurityMiddleware"]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['sentry']['config']['append_middleware_classes']</tt></td>
+    <td>Array</td>
+    <td>additional middlewares classes to append to MIDDLEWARE_CLASSES</td>
+    <td><tt>[]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['sentry']['config']['email_default_from']</tt></td>
+    <td>String</td>
+    <td>email address used in from of sent emails</td>
+    <td><tt>"#{node["sentry"]["user"]}@#{node[:fqdn]}"</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['sentry']['config']['email_backend']</tt></td>
+    <td>String</td>
+    <td>EMAIL_BACKEND class to use by django</td>
+    <td><tt>"django.core.mail.backends.smtp.EmailBackend"</tt></td>
+  </tr>
+  <tr>
     <td><tt>['sentry']['config']['email_host']</tt></td>
     <td>String</td>
     <td>SMTP host to use</td>
@@ -132,6 +174,12 @@ Attributes
     <td>Boolean</td>
     <td>Set wether to use tls for auth</td>
     <td><tt>false</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['sentry']['config']['email_subject_prefix']</tt></td>
+    <td>String</td>
+    <td>Prefix for sent emails</td>
+    <td><tt>nil</tt></td>
   </tr>
   <tr>
     <td><tt>['sentry']['data_bag']</tt></td>
@@ -166,15 +214,14 @@ Here's the expected content of such a `data_bag item`:
 ```json
 {
   "id": "credentials",
-  "admin_user_name": "xxxxxxx",
+  "admin_username": "xxxxxxx",
   "admin_password": "xxxxxxx",
-  "database_engine": "postgresql",
+  "admin_email": "xxxxxxx",
   "database_name": "sentry",
   "database_user": "sentry",
   "database_password": "xxxxxx",
   "database_host": "",
   "database_port": "",
-  "database_options": {},
   "signing_token": "xxxxxxx",
   "email_host_user": "xxxxxxx",
   "email_host_password": "xxxxxxx",

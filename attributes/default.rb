@@ -20,8 +20,14 @@
 include_attribute "python::default"
 
 default["sentry"]["version"] = "5.4.5"
+default["sentry"]["user"] = "sentry"
+default["sentry"]["group"] = "sentry"
 default["sentry"]["pipname"] = "sentry[postgres]"
-default["sentry"]["plugins"] = []
+default["sentry"]["plugins"] = [
+  "django-secure",
+  "django-bcrypt",
+  "django_sendmail_backend"
+]
 
 default["sentry"]["install_dir"] = "/opt/sentry"
 default["sentry"]["config_dir"] = "#{node["sentry"]["install_dir"]}/etc"
@@ -30,7 +36,10 @@ default["sentry"]["config_file_path"] = "#{node["sentry"]["config_dir"]}/config.
 default["sentry"]["env_d_path"] = "/etc/sentry.d"
 default["sentry"]["env_path"] = "#{node["sentry"]["env_d_path"]}/env"
 
-default["sentry"]["config"]["url_prefix"] = "http://localhost"
+default["sentry"]["config"]["db_engine"] = "django.db.backends.postgresql_psycopg2"
+default["sentry"]["config"]["db_options"] = {autocommit: true}
+default["sentry"]["config"]["allow_registration"] = false
+default["sentry"]["config"]["public"] = false
 default["sentry"]["config"]["web_host"] = "0.0.0.0"
 default["sentry"]["config"]["web_port"] = 9000
 default["sentry"]["config"]["web_options"] = {
@@ -39,9 +48,16 @@ default["sentry"]["config"]["web_options"] = {
     "X-FORWARDED-PROTO" => "https"
   }
 }
+default["sentry"]["config"]["url_prefix"] = "http://localhost:#{node["sentry"]["config"]["web_port"]}"
+default["sentry"]["config"]["email_default_from"] = "#{node["sentry"]["user"]}@#{node[:fqdn]}"
+default["sentry"]["config"]["email_backend"] = "django.core.mail.backends.smtp.EmailBackend"
 default["sentry"]["config"]["email_host"] = "localhost"
 default["sentry"]["config"]["email_port"] = "25"
 default["sentry"]["config"]["email_use_tls"] = false
+default["sentry"]["config"]["email_subject_prefix"] = nil
+default["sentry"]["config"]["additional_apps"] = ["djangosecure", "django_bcrypt"]
+default["sentry"]["config"]["prepend_middleware_classes"] = ["djangosecure.middleware.SecurityMiddleware"]
+default["sentry"]["config"]["append_middleware_classes"] = []
 
 default["sentry"]["data_bag"] = "sentry"
 default["sentry"]["data_bag_item"] = "credentials"

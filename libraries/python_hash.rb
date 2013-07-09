@@ -6,6 +6,8 @@ module Extensions
         python_value = case value
         when String
           "'#{value}'"
+        when FalseClass, TrueClass
+          value ? "True" : "False"
         when Numeric
           "#{value}"
         when Hash
