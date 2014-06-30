@@ -22,11 +22,15 @@ include_attribute "python::default"
 default["sentry"]["version"] = "5.4.6"
 default["sentry"]["user"] = "sentry"
 default["sentry"]["group"] = "sentry"
-default["sentry"]["pipname"] = "sentry[postgres]"
+default["sentry"]["pipname"] = "sentry"
+default["sentry"]["database"]["pipdeps"] = [
+  ["psycopg2", "2.4.6"], # sentry 5.4.6 has a deps on psycopg2 >=2.4.0,<2.5.0
+                         # but python_pip does not allow it as version...
+]
 default["sentry"]["plugins"] = [
-  "django-secure",
-  "django-bcrypt",
-  "django_sendmail_backend"
+  ["django-secure", "1.0"],
+  ["django-bcrypt", "0.9.2"],
+  ["django-sendmail-backend", "0.1.2"],
 ]
 
 default["sentry"]["install_dir"] = "/opt/sentry"

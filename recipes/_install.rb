@@ -50,6 +50,18 @@ python_pip node["sentry"]["pipname"] do
   group sentry_group
 end
 
+# Install database pip dependency
+node["sentry"]["database"]["pipdeps"].each do |dep|
+  dep_name, dep_version = dep
+
+  python_pip dep_name do
+    virtualenv node["sentry"]["install_dir"]
+    version dep_version
+    user sentry_user
+    group sentry_group
+  end
+end
+
 # Install additional plugins via pip in virtualenv
 node["sentry"]["plugins"].each do |plugin|
   plugin_name, plugin_version = plugin

@@ -20,6 +20,10 @@
 include_recipe "runit"
 
 pip_subscribes = ["python_pip[#{node["sentry"]["pipname"]}]"] +
+  node["sentry"]["database"]["pipdeps"].map do |dep|
+    dep_name, _ = dep
+    "python_pip[#{dep_name}]"
+  end +
   node["sentry"]["plugins"].map do |plugin|
     plugin_name, _ = plugin
     "python_pip[#{plugin_name}]"
