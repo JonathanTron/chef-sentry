@@ -43,12 +43,29 @@ python_virtualenv node["sentry"]["install_dir"] do
 end
 
 # Install sentry via pip in virtualenv
-python_pip node["sentry"]["pipname"] do
-  virtualenv node["sentry"]["install_dir"]
-  version node["sentry"]["version"]
-  user sentry_user
-  group sentry_group
+%w(libxml2-dev libxslt-dev).each do |pkg|
+  package pkg do
+    action :install
+  end
 end
+
+# Because python_pip doesn't support adding arguments yet we have to do this 
+# the hard way
+# See: https://github.com/poise/python/issues/98
+pip_cmd = "#{node['sentry']['install_dir']}/bin/pip"
+pkg_name = node['sentry']['pipname']
+pkg_ver = node['sentry']['version']
+
+execute 'pip install sentry' do
+  command "#{pip_cmd} install --allow-external #{pkg_name} --allow-unverified #{pkg_name} #{pkg_name}==#{pkg_ver}"
+end
+
+#python_pip node["sentry"]["pipname"] do
+#  virtualenv node["sentry"]["install_dir"]
+#  version node["sentry"]["version"]
+#  user sentry_user
+#  group sentry_group
+#end
 
 # Install database pip dependency
 node["sentry"]["database"]["pipdeps"].each do |dep|
