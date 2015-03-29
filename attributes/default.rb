@@ -24,8 +24,7 @@ default["sentry"]["user"] = "sentry"
 default["sentry"]["group"] = "sentry"
 default["sentry"]["pipname"] = "sentry"
 default["sentry"]["database"]["pipdeps"] = [
-  ["psycopg2", "2.4.6"], # sentry 5.4.6 has a deps on psycopg2 >=2.4.0,<2.5.0
-                         # but python_pip does not allow it as version...
+  ["MySQL-python", "1.2.5"]
 ]
 default["sentry"]["plugins"] = [
   ["django-secure", "1.0"],
