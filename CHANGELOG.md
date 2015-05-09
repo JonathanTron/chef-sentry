@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of sentry.
 
+## 0.2.0:
+
+* Upgrade Sentry to 7.4.3
+* Add a lot more configuration to allow buffers, queues, rate limits, quotas and
+  TSDB.
+
 ## 0.1.2:
 
 * Ensure `runit_service[sentry]` is not restarted during each Chef run:

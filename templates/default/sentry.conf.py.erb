@@ -19,40 +19,109 @@ DATABASES = {
     }
 }
 
-# TODO: allow to enable caches
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#         'LOCATION': ['127.0.0.1:11211'],
-#     }
-# }
+<% if @redis_enabled -%>
+###########
+## Redis ##
+###########
 
-# TODO: allow to enable buffers
-# SENTRY_USE_QUEUE = True
-# BROKER_URL = 'redis://localhost:6379'
-# SENTRY_BUFFER = 'sentry.buffer.redis.RedisBuffer'
-# SENTRY_REDIS_OPTIONS = {
-#     'hosts': {
-#         0: {
-#             'host': '127.0.0.1',
-#             'port': 6379,
-#         }
-#     }
-# }
+# Generic Redis configuration used as defaults for various things including:
+# Buffers, Quotas, TSDB
 
-SENTRY_PUBLIC = <%= @public ? 'True' : 'False' %>
-SENTRY_ALLOW_REGISTRATION = <%= @allow_registration ? 'True' : 'False' %>
+SENTRY_REDIS_OPTIONS = {
+    'hosts': {
+        <% @redis_config["hosts"].each_with_index do |(key, hash), index| %>
+        <%= key %> : {
+            'host': '<%= hash[:host] %>',
+            'port': <%= hash[:port] %>,
+        }<%= "," unless @redis_config["hosts"].size==index+1 %>
+        <% end %>
+    }
+}
+<% end -%>
 
-SENTRY_KEY = '<%= @signing_token %>'
+###########
+## Cache ##
+###########
 
+SENTRY_CACHE = '<%= @cache %>'
+
+###########
+## Queue ##
+###########
+
+CELERY_ALWAYS_EAGER = <%= @celery_always_eager ? 'True' : 'False' %>
+BROKER_URL = '<%= @broker_url %>'
+CELERYD_CONCURRENCY = <%= @celeryd_concurrency %>
+CELERY_SEND_EVENTS = <%= @celery_send_events ? 'True' : 'False' %>
+CELERYBEAT_SCHEDULE_FILENAME = '<%= @celerybeat_schedule_filename %>'
+
+#################
+## Rate Limits ##
+#################
+
+SENTRY_RATELIMITER = '<%= @ratelimiter %>'
+
+####################
+## Update Buffers ##
+####################
+
+# Buffers (combined with queueing) act as an intermediate layer between the
+# database and the storage API. They will greatly improve efficiency on large
+# numbers of the same events being sent to the API in a short amount of time.
+# (read: if you send any kind of real data to Sentry, you should enable buffers)
+
+SENTRY_BUFFER = '<%= @buffer %>'
+
+############
+## Quotas ##
+############
+
+# Quotas allow you to rate limit individual projects or the Sentry install as
+# a whole.
+
+SENTRY_QUOTAS = '<%= @quotas %>'
+
+##########
+## TSDB ##
+##########
+
+# The TSDB is used for building charts as well as making things like per-rate
+# alerts possible.
+
+SENTRY_TSDB = '<%= @tsdb %>'
+
+##################
+## File storage ##
+##################
+
+# Any Django storage backend is compatible with Sentry. For more solutions see
+# the django-storages package: https://django-storages.readthedocs.org/en/latest/
+
+SENTRY_FILESTORE = '<%= @filestore %>'
+SENTRY_FILESTORE_OPTIONS = <%= python_hash_string @filestore_options %>
+
+################
+## Web Server ##
+################
+
+# You MUST configure the absolute URI root for Sentry:
 SENTRY_URL_PREFIX = '<%= @url_prefix %>'  # No trailing slash!
+
+<% if @secure_proxy_ssl_header %>
+# If you're using a reverse proxy, you should enable the X-Forwarded-Proto
+# header and uncomment the following settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+<% end %>
 
 SENTRY_WEB_HOST = '<%= @web_host %>'
 SENTRY_WEB_PORT = <%= @web_port %>
 SENTRY_WEB_OPTIONS = <%= python_hash_string @web_options %>
 
-# Mail server configuration
-SENTRY_SERVER_EMAIL = '<%= @email_default_from %>'
+#################
+## Mail Server ##
+#################
+
+SERVER_EMAIL = '<%= @email_default_from %>'
 EMAIL_BACKEND = '<%= @email_backend %>'
 EMAIL_HOST = '<%= @email_host %>'
 EMAIL_PORT = <%= @email_port %>
@@ -66,6 +135,17 @@ EMAIL_HOST_PASSWORD = '<%= @email_password %>'
 <% if @email_subject_prefix -%>
 EMAIL_SUBJECT_PREFIX = '<%= @email_subject_prefix %>'
 <% end -%>
+
+###################
+## Other options ##
+###################
+
+SENTRY_PUBLIC = <%= @public ? 'True' : 'False' %>
+SENTRY_ALLOW_REGISTRATION = <%= @allow_registration ? 'True' : 'False' %>
+SENTRY_BEACON = <%= @beacon ? 'True' : 'False' %>
+SENTRY_ADMIN_EMAIL = '<%= @admin_email %>'
+SENTRY_KEY = '<%= @signing_token %>'
+SENTRY_USE_BIG_INTS = <%= @use_big_ints ? 'True' : 'False' %>
 
 <% if @additional_apps.any? -%>
 INSTALLED_APPS = INSTALLED_APPS + (

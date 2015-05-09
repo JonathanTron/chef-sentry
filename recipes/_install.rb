@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: wal-e
+# Cookbook Name:: sentry
 # Recipe:: _install
 #
 # Copyright 2013, Openhood S.E.N.C.
@@ -16,6 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+if node["sentry"]["manage_redis"]
+  include_recipe "sentry::_redis"
+end
 
 include_recipe "python"
 
@@ -35,11 +39,21 @@ directory node["sentry"]["install_dir"] do
   group sentry_group
 end
 
+directory node["sentry"]["filestore_dir"] do
+  owner sentry_user
+  group sentry_group
+end
+
 # Create a virtualenv for sentry
 python_virtualenv node["sentry"]["install_dir"] do
   owner sentry_user
   group sentry_group
   action :create
+end
+
+# Install deps packages to build sentry's deps
+node["sentry"]["dependency"]["packages"].each do |name|
+  package name
 end
 
 # Install sentry via pip in virtualenv

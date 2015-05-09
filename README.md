@@ -27,7 +27,7 @@ Attributes
     <td><tt>['sentry']['version']</tt></td>
     <td>String</td>
     <td>which version to install</td>
-    <td><tt>"5.4.5"</tt></td>
+    <td><tt>"7.4.3"</tt></td>
   </tr>
   <tr>
     <td><tt>['sentry']['pipname']</tt></td>
@@ -47,7 +47,13 @@ Attributes
       ]
       ```
     </td>
-    <td><tt>["django-secure", "django-bcrypt"]</tt></td>
+    <td><tt>[["django-secure", "1.0.1"], ["django-bcrypt", "0.9.2"], ["django-sendmail-backend", "0.1.2"]]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>["dependency"]["packages"]</tt></td>
+    <td>Array</td>
+    <td>list of packages to install</td>
+    <td><tt>["libxml2-dev", "libxslt1-dev", "libffi-dev",]</tt></td>
   </tr>
   <tr>
     <td><tt>['sentry']['user']</tt></td>
@@ -66,6 +72,12 @@ Attributes
     <td>String</td>
     <td>full path to the sentry install directory</td>
     <td><tt>"/opt/sentry/"</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['sentry']['filestore_dir']</tt></td>
+    <td>String</td>
+    <td>full path to the sentry filestore directory</td>
+    <td><tt>"/opt/sentry/data"</tt></td>
   </tr>
   <tr>
     <td><tt>['sentry']['config_dir']</tt></td>
@@ -240,6 +252,21 @@ Include `sentry` or more explictly `sentry::default` in your node's `run_list`:
     "recipe[sentry::default]"
   ]
 }
+```
+
+Upgrade info
+------------
+
+If you come from older version < 6.4.x then you need to run the following SQL query on the database, before upgrading:
+
+```
+UPDATE sentry_project SET team_id=(SELECT id FROM sentry_team LIMIT 1) WHERE team_id IS null;
+```
+
+If you used `bcrypt` for passwords, then you run the following SQL query on the database:
+
+```
+UPDATE auth_user SET password=CONCAT('bcrypt', SUBSTR(password, 3)) WHERE password LIKE 'bc$%';
 ```
 
 Contributing

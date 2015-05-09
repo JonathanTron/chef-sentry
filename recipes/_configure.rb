@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: wal-e
+# Cookbook Name:: sentry
 # Recipe:: _configure
 #
 # Copyright 2013, Openhood S.E.N.C.
@@ -89,9 +89,11 @@ template node["sentry"]["config_file_path"] do
     db_host: sentry_config["database_host"],
     db_port: sentry_config["database_port"],
     db_options: node["sentry"]["config"]["db_options"],
+    admin_email: node["sentry"]["config"]["admin_email"],
     signing_token: sentry_config["signing_token"],
     public: node["sentry"]["config"]["public"],
     allow_registration: node["sentry"]["config"]["allow_registration"],
+    beacon: node["sentry"]["config"]["beacon"],
     url_prefix: node["sentry"]["config"]["url_prefix"].sub(/(\/)+\z/, ""),
     web_host: node["sentry"]["config"]["web_host"],
     web_port: node["sentry"]["config"]["web_port"],
@@ -107,6 +109,20 @@ template node["sentry"]["config_file_path"] do
     additional_apps: Array(node["sentry"]["config"]["additional_apps"]),
     prepend_middleware_classes: Array(node["sentry"]["config"]["prepend_middleware_classes"]),
     append_middleware_classes: Array(node["sentry"]["config"]["append_middleware_classes"]),
+    redis_enabled: node["sentry"]["config"]["redis_enabled"],
+    redis_config: node["sentry"]["config"]["redis_config"],
+    cache: node["sentry"]["config"]["cache"],
+    celery_always_eager: node["sentry"]["config"]["celery_always_eager"],
+    broker_url: node["sentry"]["config"]["broker_url"],
+    celeryd_concurrency: node["sentry"]["config"]["celeryd_concurrency"],
+    celery_send_events: node["sentry"]["config"]["celery_send_events"],
+    celerybeat_schedule_filename: node["sentry"]["config"]["celerybeat_schedule_filename"],
+    ratelimiter: node["sentry"]["config"]["ratelimiter"],
+    buffer: node["sentry"]["config"]["buffer"],
+    quotas: node["sentry"]["config"]["quotas"],
+    tsdb: node["sentry"]["config"]["tsdb"],
+    filestore: node["sentry"]["config"]["filestore"],
+    filestore_options: node["sentry"]["config"]["filestore_options"],
   })
 end
 

@@ -19,7 +19,10 @@
 
 include_recipe "runit"
 
-pip_subscribes = ["python_pip[#{node["sentry"]["pipname"]}]"] +
+subscribes_resources = [
+  "template[#{node["sentry"]["config_file_path"]}]",
+  "python_pip[#{node["sentry"]["pipname"]}]"
+] +
   node["sentry"]["database"]["pipdeps"].map do |dep|
     dep_name, _ = dep
     "python_pip[#{dep_name}]"
@@ -39,8 +42,22 @@ runit_service "sentry" do
     config_path: node["sentry"]["config_file_path"],
   })
   action [:enable, :start]
-  subscribes :restart, "template[#{node["sentry"]["config_file_path"]}]", :delayed
-  pip_subscribes.each do |res|
+  subscribes_resources.each do |res|
+    subscribes :restart, res, :delayed
+  end
+end
+
+runit_service "sentry_queue" do
+  options({
+    virtualenv_activate: "#{node["sentry"]["install_dir"]}/bin/activate",
+    user: node["sentry"]["user"],
+    group: node["sentry"]["group"],
+    env_path: node["sentry"]["env_path"],
+    sentry_cmd: "#{node["sentry"]["install_dir"]}/bin/sentry",
+    config_path: node["sentry"]["config_file_path"],
+  })
+  action [:enable, :start]
+  subscribes_resources.each do |res|
     subscribes :restart, res, :delayed
   end
 end
