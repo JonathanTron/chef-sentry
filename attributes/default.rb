@@ -69,7 +69,7 @@ default["sentry"]["config"]["prepend_middleware_classes"] = ["djangosecure.middl
 default["sentry"]["config"]["append_middleware_classes"] = []
 default["sentry"]["config"]["use_big_ints"] = true
 # Redis config
-default["sentry"]["config"]["redis_enabled"] = false
+default["sentry"]["config"]["redis_enabled"] = true
 default["sentry"]["config"]["redis_config"]["hosts"][0]["host"] = "127.0.0.1"
 default["sentry"]["config"]["redis_config"]["hosts"][0]["port"] = "6379"
 # Cache config

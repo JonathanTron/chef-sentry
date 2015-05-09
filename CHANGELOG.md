@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of sentry.
 
+## 0.2.1:
+
+* Update `default["sentry"]["config"]["redis_enabled"]` to true
+
 ## 0.2.0:
 
 * Upgrade Sentry to 7.4.3
