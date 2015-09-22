@@ -211,6 +211,12 @@ Attributes
     <td>if the data_bag is expected to be encrypted or not</td>
     <td><tt>false</tt></td>
   </tr>
+  <tr>
+    <td><tt>['sentry']['data_bag_secret']</tt></td>
+    <td>String</td>
+    <td>Path to the databag secret file when using an encrypted databag</td>
+    <td><tt>" "</tt></td>
+  </tr>
 </table>
 
 Usage
