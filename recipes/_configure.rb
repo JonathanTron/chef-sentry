@@ -105,7 +105,7 @@ template node["sentry"]["config_file_path"] do
     email_host: node["sentry"]["config"]["email_host"],
     email_port: node["sentry"]["config"]["email_port"],
     email_user: sentry_config["email_host_user"],
-    email_password: sentry_config["email_port_port"],
+    email_password: sentry_config["email_host_password"],
     email_use_tls: node["sentry"]["config"]["email_use_tls"],
     email_subject_prefix: node["sentry"]["config"]["email_subject_prefix"],
     additional_apps: Array(node["sentry"]["config"]["additional_apps"]),
