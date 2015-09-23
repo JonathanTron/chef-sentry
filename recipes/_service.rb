@@ -41,6 +41,8 @@ runit_service "sentry" do
     sentry_cmd: "#{node["sentry"]["install_dir"]}/bin/sentry",
     config_path: node["sentry"]["config_file_path"],
   })
+  retries 2
+  retry_delay 5
   action [:enable, :start]
   subscribes_resources.each do |res|
     subscribes :restart, res, :delayed
@@ -56,6 +58,8 @@ runit_service "sentry_queue" do
     sentry_cmd: "#{node["sentry"]["install_dir"]}/bin/sentry",
     config_path: node["sentry"]["config_file_path"],
   })
+  retries 2
+  retry_delay 5
   action [:enable, :start]
   subscribes_resources.each do |res|
     subscribes :restart, res, :delayed
