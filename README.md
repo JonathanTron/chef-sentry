@@ -214,8 +214,8 @@ Attributes
   <tr>
     <td><tt>['sentry']['data_bag_secret']</tt></td>
     <td>String</td>
-    <td>Path to the databag secret file when using an encrypted databag</td>
-    <td><tt>" "</tt></td>
+    <td>Path to the databag secret file when using an encrypted databag, if nil the value from `Chef::Config[:encrypted_data_bag_secret]` is used.</td>
+    <td><tt>nil</tt></td>
   </tr>
 </table>
 
