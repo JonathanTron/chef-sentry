@@ -100,6 +100,7 @@ template node["sentry"]["config_file_path"] do
     web_host: node["sentry"]["config"]["web_host"],
     web_port: node["sentry"]["config"]["web_port"],
     web_options: node["sentry"]["config"]["web_options"],
+    secure_proxy_ssl_header: node["sentry"]["config"]["secure_proxy_ssl_header"],
     email_default_from: node["sentry"]["config"]["email_default_from"],
     email_backend: node["sentry"]["config"]["email_backend"],
     email_host: node["sentry"]["config"]["email_host"],
