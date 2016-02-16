@@ -137,6 +137,16 @@ execute "sentry DB upgrade" do
 end
 
 initial_admin_json = "#{node["sentry"]["config_dir"]}/initial_admin.json"
+extra_config = {}
+
+if node["sentry"]["major_version"].to_i < 8
+  extra_config["first_name"] = "Chef"
+  extra_config["last_name"] = "Admin"
+  create_initail_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
+else
+  create_initail_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} django loaddata #{initial_admin_json}"
+end
+
 template initial_admin_json do
   source "initial_admin.json.erb"
   owner sentry_user
@@ -145,12 +155,13 @@ template initial_admin_json do
   variables({
     username: sentry_config["admin_username"],
     password: sentry_config["admin_password"],
-    email: sentry_config["admin_email"]
+    email: sentry_config["admin_email"],
+    extra_config: extra_config
   })
 end
 
 execute "create initial admin" do
-  command "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
+  command create_initail_admin_command
   action :nothing
   subscribes :run, "template[#{initial_admin_json}]", :immediately
 end
