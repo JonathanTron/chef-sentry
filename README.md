@@ -27,7 +27,7 @@ Attributes
     <td><tt>['sentry']['version']</tt></td>
     <td>String</td>
     <td>which version to install</td>
-    <td><tt>"7.4.3"</tt></td>
+    <td><tt>"7.7.1" **</tt></td>
   </tr>
   <tr>
     <td><tt>['sentry']['pipname']</tt></td>
@@ -218,6 +218,11 @@ Attributes
     <td><tt>nil</tt></td>
   </tr>
 </table>
+
+
+****NOTE** Versions prior to 7.7.x are having trouble running sentry upgrade command. It throws below error:
+
+	STDERR: FATAL ERROR - The following SQL query failed: ALTER TABLE "sentry_authprovider" ALTER COLUMN "config" TYPE jsonb, ALTER COLUMN 	"config" DROP NOT NULL, ALTER COLUMN "config" DROP DEFAULT; The error was: column "config" cannot be cast automatically to type jsonb HINT: 	You might need to specify "USING config::jsonb".
 
 Usage
 -----
