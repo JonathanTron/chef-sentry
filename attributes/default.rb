@@ -18,7 +18,6 @@
 #
 
 include_attribute "python::default"
-default["sentry"]["major_version"] = "7"
 default["sentry"]["version"] = "7.7.1"
 default["sentry"]["user"] = "sentry"
 default["sentry"]["group"] = "sentry"

@@ -139,7 +139,7 @@ end
 initial_admin_json = "#{node["sentry"]["config_dir"]}/initial_admin.json"
 extra_config = {}
 
-if node["sentry"]["major_version"].to_i < 8
+if node["sentry"]["version"].split(".")[0].to_i < 8
   extra_config["first_name"] = "Chef"
   extra_config["last_name"] = "Admin"
   create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
