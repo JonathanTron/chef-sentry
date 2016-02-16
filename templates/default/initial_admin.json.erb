@@ -6,8 +6,9 @@
       "username": "<%= @username %>",
       "password": "<%= @password %>",
       "email": "<%= @email %>",
-      "first_name": "Chef",
-      "last_name": "Admin",
+      <% @initial_admin_config_sentry_prior_8.each do |key,value| %>
+      "<%= key %>": "<%= value %>",
+      <% end %>
       "is_active": true,
       "is_superuser": true,
       "is_staff": true
