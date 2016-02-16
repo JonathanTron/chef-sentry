@@ -142,9 +142,9 @@ extra_config = {}
 if node["sentry"]["major_version"].to_i < 8
   extra_config["first_name"] = "Chef"
   extra_config["last_name"] = "Admin"
-  create_initail_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
+  create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
 else
-  create_initail_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} django loaddata #{initial_admin_json}"
+  create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} django loaddata #{initial_admin_json}"
 end
 
 template initial_admin_json do
@@ -161,7 +161,7 @@ template initial_admin_json do
 end
 
 execute "create initial admin" do
-  command create_initail_admin_command
+  command create_initial_admin_command
   action :nothing
   subscribes :run, "template[#{initial_admin_json}]", :immediately
 end
