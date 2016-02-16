@@ -239,6 +239,8 @@ Here's the expected content of such a `data_bag item`:
   "id": "credentials",
   "admin_username": "xxxxxxx",
   "admin_password": "xxxxxxx",
+  "admin_first_name": "Chef",
+  "admin_last_name": "Admin",
   "admin_email": "xxxxxxx",
   "database_name": "sentry",
   "database_user": "sentry",

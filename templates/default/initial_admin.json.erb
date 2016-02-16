@@ -6,7 +6,7 @@
       "username": "<%= @username %>",
       "password": "<%= @password %>",
       "email": "<%= @email %>",
-      <% @initial_admin_config_sentry_prior_8.each do |key,value| %>
+      <% @initial_admin_config.each do |key,value| %>
       "<%= key %>": "<%= value %>",
       <% end %>
       "is_active": true,

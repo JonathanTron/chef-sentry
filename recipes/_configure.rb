@@ -137,14 +137,16 @@ execute "sentry DB upgrade" do
 end
 
 initial_admin_json = "#{node["sentry"]["config_dir"]}/initial_admin.json"
-# In sentry version prior to 8 there is possiblity to add first and last name for users.
-initial_admin_config_sentry_prior_8 = {}
+initial_admin_config = {}
 
 if node["sentry"]["version"].split(".")[0].to_i < 8
-  initial_admin_config_sentry_prior_8["first_name"] = "Chef"
-  initial_admin_config_sentry_prior_8["last_name"] = "Admin"
+  # In sentry version prior to 8 the user table model is having field first_name and last_name
+  initial_admin_config["first_name"] = sentry_config["admin_first_name"]
+  initial_admin_config["last_name"] = sentry_config["admin_last_name"]
   create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
 else
+  # In sentry version 8 the user table model is having field name
+  initial_admin_config["name"] = "#{sentry_config["admin_first_name"] sentry_config["admin_last_name"]}"
   create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} django loaddata #{initial_admin_json}"
 end
 
@@ -157,7 +159,7 @@ template initial_admin_json do
     username: sentry_config["admin_username"],
     password: sentry_config["admin_password"],
     email: sentry_config["admin_email"],
-    initial_admin_config_sentry_prior_8: initial_admin_config_sentry_prior_8
+    initial_admin_config: initial_admin_config
   })
 end
 
