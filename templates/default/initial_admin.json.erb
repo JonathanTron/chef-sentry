@@ -6,7 +6,7 @@
       "username": "<%= @username %>",
       "password": "<%= @password %>",
       "email": "<%= @email %>",
-      <% extra_config.each do |key,value| %>
+      <% @extra_config.each do |key,value| %>
       "<%= key %>": "<%= value %>",
       <% end %>
       "is_active": true,
