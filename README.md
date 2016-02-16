@@ -1,7 +1,7 @@
 sentry Cookbook
 =================
 
-Installs and configure Sentry realtime error logging and aggregation platform.
+Installs and configure Sentry realtime error logging and aggregation platform. This cookbook supports sentry 7.7.1 and above.
 
 Requirements
 ------------
