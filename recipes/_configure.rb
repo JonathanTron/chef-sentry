@@ -146,7 +146,7 @@ if node["sentry"]["version"].split(".")[0].to_i < 8
   create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
 else
   # In sentry version 8 the user table model is having field name
-  initial_admin_config["name"] = "#{sentry_config["admin_first_name"] sentry_config["admin_last_name"]}"
+  initial_admin_config["name"] = "#{sentry_config['admin_first_name']} #{sentry_config['admin_last_name']}"
   create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} django loaddata #{initial_admin_json}"
 end
 
