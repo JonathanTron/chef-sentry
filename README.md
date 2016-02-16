@@ -1,7 +1,7 @@
 sentry Cookbook
 =================
 
-Installs and configure Sentry realtime error logging and aggregation platform.
+Installs and configure Sentry realtime error logging and aggregation platform. This cookbook supports sentry 7.7.1 and above.
 
 Requirements
 ------------
@@ -27,7 +27,7 @@ Attributes
     <td><tt>['sentry']['version']</tt></td>
     <td>String</td>
     <td>which version to install</td>
-    <td><tt>"7.4.3"</tt></td>
+    <td><tt>"7.7.1" **</tt></td>
   </tr>
   <tr>
     <td><tt>['sentry']['pipname']</tt></td>
@@ -219,6 +219,11 @@ Attributes
   </tr>
 </table>
 
+
+****NOTE** Versions prior to 7.7.x are having trouble running sentry upgrade command. It throws below error:
+
+	STDERR: FATAL ERROR - The following SQL query failed: ALTER TABLE "sentry_authprovider" ALTER COLUMN "config" TYPE jsonb, ALTER COLUMN 	"config" DROP NOT NULL, ALTER COLUMN "config" DROP DEFAULT; The error was: column "config" cannot be cast automatically to type jsonb HINT: 	You might need to specify "USING config::jsonb".
+
 Usage
 -----
 
@@ -234,6 +239,8 @@ Here's the expected content of such a `data_bag item`:
   "id": "credentials",
   "admin_username": "xxxxxxx",
   "admin_password": "xxxxxxx",
+  "admin_first_name": "Chef",
+  "admin_last_name": "Admin",
   "admin_email": "xxxxxxx",
   "database_name": "sentry",
   "database_user": "sentry",
