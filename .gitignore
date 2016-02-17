@@ -2,6 +2,8 @@
 .kitchen/
 .kitchen.local.yml
 
+.chef
+
 # Berkshelf
 .vagrant
 Berksfile.lock
