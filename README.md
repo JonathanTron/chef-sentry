@@ -127,6 +127,7 @@ License and Authors
 -------------------
 
 Author:: Jonathan Tron (<jonathan@openhood.com>)
+Author:: Nilanjan Roy (<nilanjan.roy@nosto.com>)
 
 Copyright 2013, Openhood S.E.N.C.
 
