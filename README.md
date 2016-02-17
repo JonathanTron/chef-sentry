@@ -16,209 +16,40 @@ Attributes
 ----------
 
 #### sentry::default
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['version']</tt></td>
-    <td>String</td>
-    <td>which version to install</td>
-    <td><tt>"7.7.1" **</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['pipname']</tt></td>
-    <td>String</td>
-    <td>which package to install</td>
-    <td><tt>"sentry[postgres]"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['plugins']</tt></td>
-    <td>Array</td>
-    <td>
-      list of plugins to install:
-      ```
-      [
-        "sentry-irc",                 # No version specified
-        ["sentry-github", "0.1.2"], # With explicit version specified
-      ]
-      ```
-    </td>
-    <td><tt>[["django-secure", "1.0.1"], ["django-bcrypt", "0.9.2"], ["django-sendmail-backend", "0.1.2"]]</tt></td>
-  </tr>
-  <tr>
-    <td><tt>["dependency"]["packages"]</tt></td>
-    <td>Array</td>
-    <td>list of packages to install</td>
-    <td><tt>["libxml2-dev", "libxslt1-dev", "libffi-dev",]</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['user']</tt></td>
-    <td>String</td>
-    <td>system user to run sentry</td>
-    <td><tt>"sentry"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['group']</tt></td>
-    <td>String</td>
-    <td>system group to run sentry</td>
-    <td><tt>"sentry"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['install_dir']</tt></td>
-    <td>String</td>
-    <td>full path to the sentry install directory</td>
-    <td><tt>"/opt/sentry/"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['filestore_dir']</tt></td>
-    <td>String</td>
-    <td>full path to the sentry filestore directory</td>
-    <td><tt>"/opt/sentry/data"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config_dir']</tt></td>
-    <td>String</td>
-    <td>path to sentry config directory</td>
-    <td><tt>"/opt/sentry/etc"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config_file_path']</tt></td>
-    <td>String</td>
-    <td>path to sentry config file</td>
-    <td><tt>"/opt/sentry/etc/config.py"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['env_d_path']</tt></td>
-    <td>String</td>
-    <td>path to the daemontool's env.d path for sentry configurations</td>
-    <td><tt>"/etc/sentry.d"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['env_path']</tt></td>
-    <td>String</td>
-    <td>path to the daemontool's env path for sentry configurations</td>
-    <td><tt>"/etc/sentry.d/env"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['url_prefix']</tt></td>
-    <td>String</td>
-    <td>URL where sentry will be accessible</td>
-    <td><tt>"http://localhost"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['db_engine']</tt></td>
-    <td>String</td>
-    <td>Django class to use to connect to database</td>
-    <td><tt>"django.db.backends.postgresql_psycopg2"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['db_options']</tt></td>
-    <td>Hash</td>
-    <td>OPTIONS passed to database config</td>
-    <td><tt>{autocommit: true}</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['web_host']</tt></td>
-    <td>String</td>
-    <td>IP to which sentry is listening</td>
-    <td><tt>"127.0.0.1"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['web_port']</tt></td>
-    <td>String</td>
-    <td>Port to which sentry is listening</td>
-    <td><tt>9000</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['web_options']</tt></td>
-    <td>Hash</td>
-    <td>additional options used in SENTRY_WEB_OPTIONS</td>
-    <td><tt>{"workers": 3, secure_scheme_headers: {"X-FORWARDED-PROTO": 'https'}}</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['additional_apps']</tt></td>
-    <td>Array</td>
-    <td>additional apps to append to INSTALLED_APPS</td>
-    <td><tt>["djangosecure", "django_bcrypt"]</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['prepend_middleware_classes']</tt></td>
-    <td>Array</td>
-    <td>additional middlewares classes to prepend to MIDDLEWARE_CLASSES</td>
-    <td><tt>["djangosecure.middleware.SecurityMiddleware"]</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['append_middleware_classes']</tt></td>
-    <td>Array</td>
-    <td>additional middlewares classes to append to MIDDLEWARE_CLASSES</td>
-    <td><tt>[]</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['email_default_from']</tt></td>
-    <td>String</td>
-    <td>email address used in from of sent emails</td>
-    <td><tt>"#{node["sentry"]["user"]}@#{node[:fqdn]}"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['email_backend']</tt></td>
-    <td>String</td>
-    <td>EMAIL_BACKEND class to use by django</td>
-    <td><tt>"django.core.mail.backends.smtp.EmailBackend"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['email_host']</tt></td>
-    <td>String</td>
-    <td>SMTP host to use</td>
-    <td><tt>"localhost"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['email_port']</tt></td>
-    <td>String</td>
-    <td>SMTP port to use</td>
-    <td><tt>25</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['email_use_tls']</tt></td>
-    <td>Boolean</td>
-    <td>Set wether to use tls for auth</td>
-    <td><tt>false</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['config']['email_subject_prefix']</tt></td>
-    <td>String</td>
-    <td>Prefix for sent emails</td>
-    <td><tt>nil</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['data_bag']</tt></td>
-    <td>String</td>
-    <td>name of the data_bag holding the sentry configuration</td>
-    <td><tt>"sentry"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['data_bag_item']</tt></td>
-    <td>String</td>
-    <td>name of the data_bag's item holding the credentials</td>
-    <td><tt>"credentials"</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['use_encrypted_data_bag']</tt></td>
-    <td>Boolean</td>
-    <td>if the data_bag is expected to be encrypted or not</td>
-    <td><tt>false</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['sentry']['data_bag_secret']</tt></td>
-    <td>String</td>
-    <td>Path to the databag secret file when using an encrypted databag, if nil the value from `Chef::Config[:encrypted_data_bag_secret]` is used.</td>
-    <td><tt>nil</tt></td>
-  </tr>
-</table>
 
+| Key | Type | Description | Default |
+|-----|------|-------------|---------|
+| `['sentry']['version']` | String | which version to install | `"7.7.1" **` |
+| `['sentry']['pipname']` | String | which package to install | `"sentry[postgres]"` |
+| `['sentry']['plugins']` | Array | list of plugins to install: ``` [ "sentry-irc", # No version specified ["sentry-github", "0.1.2"], # With explicit version specified ] ``` | `[["django-secure", "1.0.1"], ["django-bcrypt", "0.9.2"], ["django-sendmail-backend", "0.1.2"]]` |
+| `["dependency"]["packages"]` | Array | list of packages to install | `["libxml2-dev", "libxslt1-dev", "libffi-dev",]` |
+| `['sentry']['user']` | String | system user to run sentry | `"sentry"` |
+| `['sentry']['group']` | String | system group to run sentry | `"sentry"` |
+| `['sentry']['install_dir']` | String | full path to the sentry install directory | `"/opt/sentry/"` |
+| `['sentry']['filestore_dir']` | String | full path to the sentry filestore directory | `"/opt/sentry/data"` |
+| `['sentry']['config_dir']` | String | path to sentry config directory | `"/opt/sentry/etc"` |
+| `['sentry']['config_file_path']` | String | path to sentry config file | `"/opt/sentry/etc/config.py"` |
+| `['sentry']['env_d_path']` | String | path to the daemontool's env.d path for sentry configurations | `"/etc/sentry.d"` |
+| `['sentry']['env_path']` | String | path to the daemontool's env path for sentry configurations | `"/etc/sentry.d/env"` |
+| `['sentry']['config']['url_prefix']` | String | URL where sentry will be accessible | `"http://localhost"` |
+| `['sentry']['config']['db_engine']` | String | Django class to use to connect to database | `"django.db.backends.postgresql_psycopg2"` |
+| `['sentry']['config']['db_options']` | Hash | OPTIONS passed to database config | `{autocommit: true}` |
+| `['sentry']['config']['web_host']` | String | IP to which sentry is listening | `"127.0.0.1"` |
+| `['sentry']['config']['web_port']` | String | Port to which sentry is listening | `9000` |
+| `['sentry']['config']['web_options']` | Hash | additional options used in SENTRY_WEB_OPTIONS | `{"workers": 3, secure_scheme_headers: {"X-FORWARDED-PROTO": 'https'}}` |
+| `['sentry']['config']['additional_apps']` | Array | additional apps to append to INSTALLED_APPS | `["djangosecure", "django_bcrypt"]` |
+| `['sentry']['config']['prepend_middleware_classes']` | Array | additional middlewares classes to prepend to MIDDLEWARE_CLASSES | `["djangosecure.middleware.SecurityMiddleware"]` |
+| `['sentry']['config']['append_middleware_classes']` | Array | additional middlewares classes to append to MIDDLEWARE_CLASSES | `[]` |
+| `['sentry']['config']['email_default_from']` | String | email address used in from of sent emails | `"#{node["sentry"]["user"]}@#{node[:fqdn]}"` |
+| `['sentry']['config']['email_backend']` | String | EMAIL_BACKEND class to use by django | `"django.core.mail.backends.smtp.EmailBackend"` |
+| `['sentry']['config']['email_host']` | String | SMTP host to use | `"localhost"` |
+| `['sentry']['config']['email_port']` | String | SMTP port to use | `25` |
+| `['sentry']['config']['email_use_tls']` | Boolean | Set wether to use tls for auth | `false` |
+| `['sentry']['config']['email_subject_prefix']` | String | Prefix for sent emails | `nil` |
+| `['sentry']['data_bag']` | String | name of the data_bag holding the sentry configuration | `"sentry"` |
+| `['sentry']['data_bag_item']` | String | name of the data_bag's item holding the credentials | `"credentials"` |
+| `['sentry']['use_encrypted_data_bag']` | Boolean | if the data_bag is expected to be encrypted or not | `false` |
+| `['sentry']['data_bag_secret']` | String | Path to the databag secret file when using an encrypted databag, if nil the value from `Chef::Config[:encrypted_data_bag_secret]` is used. | `nil` |
 
 ****NOTE** Versions prior to 7.7.x are having trouble running sentry upgrade command. It throws below error:
 
