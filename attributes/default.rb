@@ -33,7 +33,7 @@ default["sentry"]["dependency"]["packages"] = [
   "python-setuptools",
   "python-pip",
   "python-dev",
-  "gcc"
+  "gcc",
   "libjpeg-dev",
   "libxml2-dev",
   "libxslt-dev",
@@ -46,6 +46,8 @@ default["sentry"]["install_dir"] = "/opt/sentry"
 default["sentry"]["filestore_dir"] = "/opt/sentry/data"
 default["sentry"]["config_dir"] = "#{node["sentry"]["install_dir"]}/etc"
 default["sentry"]["config_file_path"] = "#{node["sentry"]["config_dir"]}/config.py"
+default["sentry"]["config_python_path"] = "#{node["sentry"]["config_dir"]}/sentry.config.py"
+default["sentry"]["config_yaml_path"] = "#{node["sentry"]["config_dir"]}/config.yml"
 
 default["sentry"]["env_d_path"] = "/etc/sentry.d"
 default["sentry"]["env_path"] = "#{node["sentry"]["env_d_path"]}/env"
