@@ -30,8 +30,6 @@ default["sentry"]["plugins"] = [
 ]
 # dependencies per: https://docs.getsentry.com/on-premise/server/installation/python/
 default["sentry"]["dependency"]["packages"] = [
-  "python-setuptools",
-  "python-pip",
   "python-dev",
   "gcc",
   "libjpeg-dev",
@@ -40,7 +38,7 @@ default["sentry"]["dependency"]["packages"] = [
   "libxslt1-dev",
   "libffi-dev",
   "libyaml-dev",
-  "libpq-dev", # not listed but blocks sentry install
+  "libpq-dev", # not in docs listed but blocks sentry install
 ]
 default["sentry"]["install_dir"] = "/opt/sentry"
 default["sentry"]["filestore_dir"] = "/opt/sentry/data"
@@ -49,8 +47,9 @@ default["sentry"]["config_file_path"] = "#{node["sentry"]["config_dir"]}/config.
 default["sentry"]["config_python_path"] = "#{node["sentry"]["config_dir"]}/sentry.config.py"
 default["sentry"]["config_yaml_path"] = "#{node["sentry"]["config_dir"]}/config.yml"
 
+# ENV variables for runit
 default["sentry"]["env_d_path"] = "/etc/sentry.d"
-default["sentry"]["env_path"] = "#{node["sentry"]["env_d_path"]}/env"
+default["sentry"]["env_path"] = "#{node["sentry"]["env_d_path"]}/env" 
 
 default["sentry"]["config"]["db_engine"] = "django.db.backends.postgresql_psycopg2"
 default["sentry"]["config"]["db_options"] = {autocommit: true}
@@ -58,6 +57,7 @@ default["sentry"]["config"]["admin_email"] = ""
 
 # web server
 default["sentry"]["config"]["allow_registration"] = false
+default["sentry"]["config"]["allow_origin"] = false
 default["sentry"]["config"]["beacon"] = false
 default["sentry"]["config"]["public"] = false
 default["sentry"]["config"]["web_host"] = "127.0.0.1"
@@ -70,10 +70,11 @@ default["sentry"]["config"]["web_options"] = {
   }
 }
 default["sentry"]["config"]["url_prefix"] = "http://localhost:#{node["sentry"]["config"]["web_port"]}"
+default["sentry"]["config"]["force_script_name"] = false
 
 # smtp
 default["sentry"]["config"]["smtp_host"] = '0.0.0.0'
-default["sentry"]["config"]["smtp_port"] = '1025'
+default["sentry"]["config"]["smtp_port"] = '5587'
 default["sentry"]["config"]["smtp_hostname"] = 'localhost'  
 
 default["sentry"]["config"]["email_default_from"] = "#{node["sentry"]["user"]}@#{node[:fqdn]}"

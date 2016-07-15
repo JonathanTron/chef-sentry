@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'shellwords'
 
 Erubis::Context.send(:include, Extensions::Templates)
 
@@ -58,8 +59,8 @@ directory sentry_env_path do
   action :create
 end
 
+# set env variables for runit to use
 (sentry_config["additional_env_vars"] || {}).each do |key, value|
-
   file "#{sentry_env_path}/#{key.to_s.upcase}" do
     owner "root"
     group sentry_group
@@ -78,7 +79,7 @@ directory node["sentry"]["config_dir"] do
   action :create
 end
 
-# redis and email configs move to conifg.yml in 8
+# redis and email configs move to conifg.yml in version 8
 if node["sentry"]["version"].split(".")[0].to_i < 8
   template node["sentry"]["config_file_path"] do
     source "sentry.conf.py.erb"
@@ -131,7 +132,46 @@ if node["sentry"]["version"].split(".")[0].to_i < 8
       filestore_options: node["sentry"]["config"]["filestore_options"],
     })
   end
-else # 8.0 or above
+
+  execute "sentry DB upgrade" do
+    command "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} upgrade --noinput"
+    user sentry_user
+    group sentry_group
+    action :run
+  end
+
+  initial_admin_json = "#{node["sentry"]["config_dir"]}/initial_admin.json"
+  initial_admin_config = {}
+
+  initial_admin_config["first_name"] = sentry_config["admin_first_name"]
+  initial_admin_config["last_name"] = sentry_config["admin_last_name"]
+  create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
+
+
+  # not sure why this isn't just using the createuser command that sentry provides
+  template initial_admin_json do
+    source "initial_admin.json.erb"
+    owner sentry_user
+    group sentry_group
+    mode  "0600"
+    variables({
+      username: sentry_config["admin_username"],
+      password: sentry_config["admin_password"],
+      email: sentry_config["admin_email"],
+      initial_admin_config: initial_admin_config
+    })
+  end
+
+  execute "create initial admin" do
+    command create_initial_admin_command
+    action :nothing
+    subscribes :run, "template[#{initial_admin_json}]", :immediately
+  end
+
+else
+  # 8.0 or above
+  # this differentiates based on the version, but really this is a differentiation between
+  # supporting the old way of using this cookbook and the new one written for Sentry 8.6
   template node["sentry"]["config_python_path"] do
     source "sentry.conf.8.0.py.erb"
     owner sentry_user
@@ -150,20 +190,19 @@ else # 8.0 or above
       # general
       single_organization: node["sentry"]["config"]["single_organization"],
       debug: node["sentry"]["config"]["debug"],
-      
+      use_big_ints: node["sentry"]["config"]["use_big_ints"],
+
       # authentication
       signing_token: sentry_config["signing_token"],
       public: node["sentry"]["config"]["public"],
       allow_registration: node["sentry"]["config"]["allow_registration"],
-      allow_origin: node["sentry"]["config"]["allow_origin"], #new
+      allow_origin: node["sentry"]["config"]["allow_origin"],
       beacon: node["sentry"]["config"]["beacon"],
       # web server
       web_host: node["sentry"]["config"]["web_host"],
       web_port: node["sentry"]["config"]["web_port"],
       web_options: node["sentry"]["config"]["web_options"],
       secure_proxy_ssl_header: node["sentry"]["config"]["secure_proxy_ssl_header"],
-      session_cookie_secure: node["sentry"]["config"]["session_cookie_secure"],
-      csrf_cookie_secure: node["sentry"]["config"]["csrf_cookie_secure"],
       force_script_name: node["sentry"]["config"]["force_script_name"],
       # smtp
       smtp_host: node["sentry"]["config"]["smtp_host"],
@@ -188,17 +227,7 @@ else # 8.0 or above
     })
   end
 
-
-  # generate secret key
-  ruby_block 'make_secret_key' do 
-    block do
-      Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
-      command = "/www/sentry/bin/sentry config generate-secret-key"
-      command_out = shell_out(command)
-      node.set['sentry_secret_key'] = command_out.stdout
-    end
-  end
-
+  # new config file starting in 8.0
   template node["sentry"]["config_yaml_path"] do 
     source "conf.yml.erb"
     owner sentry_user
@@ -223,51 +252,25 @@ else # 8.0 or above
       admin_email: node["sentry"]["config"]["admin_email"],
       url_prefix: node["sentry"]["config"]["url_prefix"].sub(/(\/)+\z/, ""),
       # sentry secret: regen if compromised
-      sentry_secret_key: node['sentry_secret_key']
+      signing_token: sentry_config["signing_token"]
     })
   end
+
+
+  # EXPLICIT GUARD: if this is not the first run and a user already exists, trying to create a user errors
+  execute 'create sentry user' do
+    email = sentry_config['admin_email']
+    check_user_command = "echo 'from sentry.models import User; import sys; exit_code = 0 if User.objects.filter(email=\"#{email}\").exists() else 1; sys.exit(exit_code)' | #{node['sentry']['install_dir']}/bin/sentry shell"
+    password = sentry_config['admin_password']
+    command "SENTRY_CONF=#{node['sentry']['config_dir']} #{node['sentry']['install_dir']}/bin/sentry createuser --email #{email.shellescape} --password #{password.shellescape} --superuser"
+    not_if check_user_command
+  end
+
+  # per the 8.x docs
+  execute "sentry DB upgrade" do
+    command "SENTRY_CONF=#{node['sentry']['config_dir']} #{node["sentry"]["install_dir"]}/bin/sentry upgrade"
+    user sentry_user
+    group sentry_group
+    action :run
+  end
 end
-
-execute "sentry DB upgrade" do
-  command "SENTRY_CONF=#{node['sentry']['config_dir']} #{node["sentry"]["install_dir"]}/bin/sentry upgrade"
-  user sentry_user
-  group sentry_group
-  action :run
-end
-
-execute 'create sentry user' do
-  command "SENTRY_CONF=#{node['sentry']['config_dir']} #{node['sentry']['install_dir']}/bin/sentry createuser"
-end
-
-# initial_admin_json = "#{node["sentry"]["config_dir"]}/initial_admin.json"
-# initial_admin_config = {}
-
-# if node["sentry"]["version"].split(".")[0].to_i < 8
-#   # In sentry version prior to 8 the user table model has the fields 'first_name' and 'last_name'
-#   initial_admin_config["first_name"] = sentry_config["admin_first_name"]
-#   initial_admin_config["last_name"] = sentry_config["admin_last_name"]
-#   create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} loaddata #{initial_admin_json}"
-# else
-#   # In sentry version 8 the user table model has the field 'name'
-#   initial_admin_config["name"] = "#{sentry_config['admin_first_name']} #{sentry_config['admin_last_name']}"
-#   create_initial_admin_command = "#{node["sentry"]["install_dir"]}/bin/sentry --config=#{node["sentry"]["config_file_path"]} django loaddata #{initial_admin_json}"
-# end
-
-# template initial_admin_json do
-#   source "initial_admin.json.erb"
-#   owner sentry_user
-#   group sentry_group
-#   mode  "0600"
-#   variables({
-#     username: sentry_config["admin_username"],
-#     password: sentry_config["admin_password"],
-#     email: sentry_config["admin_email"],
-#     initial_admin_config: initial_admin_config
-#   })
-# end
-
-# execute "create initial admin" do
-#   command create_initial_admin_command
-#   action :nothing
-#   subscribes :run, "template[#{initial_admin_json}]", :immediately
-# end

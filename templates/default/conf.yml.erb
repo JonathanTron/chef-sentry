@@ -7,9 +7,9 @@
 # Mail Server #
 ###############
 
-mail.backend: <%= @mail_backend %>  # Use dummy if you want to disable email entirely
+mail.backend: <%= @email_backend %>  # Use dummy if you want to disable email entirely
 mail.host: '<%= @email_host %>'
-mail.port: '<%= @email_port %>'
+mail.port: <%= @email_port %>
 mail.username: '<%= @email_user || '' %>'
 mail.password: '<%= @email_password || '' %>'
 mail.use-tls: <%= @email_use_tls ? true : false %>
@@ -45,7 +45,7 @@ mail.mailgun-api-key: '<%= mailgun_api_key %>'
 # If this file ever becomes compromised, it's important to regenerate your a new key
 # Changing this value will result in all current sessions being invalidated.
 # A new key can be generated with `$ sentry config generate-secret-key`
-system.secret-key: '<%= @sentry_secret_key %>'
+system.secret-key: '<%= @signing_token %>'
 
 # The ``redis.clusters`` setting is used, unsurprisingly, to configure Redis
 # clusters. These clusters can be then referred to by name when configuring
@@ -55,7 +55,9 @@ redis.clusters:
   <%= hash[:name] %>:
     hosts:
       <%= index %>:
-        <%= hash[:host] %>
-        <%= hash[:port] %>
-        <%= hash[:password] if hash[:password] %>
+        host: <%= hash[:host] %>
+        port: <%= hash[:port] %>
+        <% if hash[:password] %>
+        password: hash[:password]
+        <% end %>
   <% end %>

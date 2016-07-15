@@ -141,8 +141,8 @@ CSRF_COOKIE_SECURE = True
 
 # If you're not hosting at the root of your web server,
 # you need to uncomment and set it to the path where Sentry is hosted.
-<% if @force_script -%>
-FORCE_SCRIPT_NAME = '<%= @forces_script_name %>'
+<% if @force_script_name -%>
+FORCE_SCRIPT_NAME = '<%= @force_script_name %>'
 <% else %>
 # FORCE_SCRIPT_NAME = '/sentry'
 <% end -%>
@@ -160,7 +160,7 @@ SENTRY_WEB_OPTIONS = <%= python_hash_string @web_options %>
 ##########
 
 SENTRY_PUBLIC = <%= @public ? 'True' : 'False' %>
-SENTRY_ALLOW_ORIGIN = <%= @allow_origin ? 'True' : 'False' %>
+SENTRY_ALLOW_ORIGIN = <%= @allow_origin ? @allow_origin : 'None' %>
 SENTRY_FEATURES['auth:register'] = <%= @allow_registration ? 'True' : 'False' %>
 
 #################
