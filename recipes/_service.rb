@@ -37,14 +37,14 @@ subscribes_resources = [
 if node['sentry']['version'] .split('.')[0].to_i >= 8
 
   runit_service "sentry-web" do
-     options({
+    options({
       virtualenv_activate: "#{node["sentry"]["install_dir"]}/bin/activate",
       env_path: "#{node['sentry']['env_path']}",
       user: node["sentry"]["user"],
       group: node["sentry"]["group"],
       sentry_cmd: "#{node["sentry"]["install_dir"]}/bin/sentry"
     })
-    sv_timeout 10
+    sv_timeout 60
     retries 2
     retry_delay 5
     action [:enable, :start]

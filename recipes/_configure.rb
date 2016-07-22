@@ -173,7 +173,7 @@ else
   # this differentiates based on the version, but really this is a differentiation between
   # supporting the old way of using this cookbook and the new one written for Sentry 8.6
   template node["sentry"]["config_python_path"] do
-    source "sentry.conf.8.0.py.erb"
+    source "8.0/sentry.conf.py.erb"
     owner sentry_user
     group sentry_group
     mode "750"
@@ -229,7 +229,7 @@ else
 
   # new config file starting in 8.0
   template node["sentry"]["config_yaml_path"] do 
-    source "conf.yml.erb"
+    source "8.0/conf.yml.erb"
     owner sentry_user
     group sentry_group
     mode "750"
@@ -256,21 +256,21 @@ else
     })
   end
 
-
-  # EXPLICIT GUARD: if this is not the first run and a user already exists, trying to create a user errors
-  execute 'create sentry user' do
-    email = sentry_config['admin_email']
-    check_user_command = "echo 'from sentry.models import User; import sys; exit_code = 0 if User.objects.filter(email=\"#{email}\").exists() else 1; sys.exit(exit_code)' | #{node['sentry']['install_dir']}/bin/sentry shell"
-    password = sentry_config['admin_password']
-    command "SENTRY_CONF=#{node['sentry']['config_dir']} #{node['sentry']['install_dir']}/bin/sentry createuser --email #{email.shellescape} --password #{password.shellescape} --superuser"
-    not_if check_user_command
-  end
-
   # per the 8.x docs
   execute "sentry DB upgrade" do
-    command "SENTRY_CONF=#{node['sentry']['config_dir']} #{node["sentry"]["install_dir"]}/bin/sentry upgrade"
+    command "SENTRY_CONF=#{node['sentry']['config_dir']} #{node["sentry"]["install_dir"]}/bin/sentry upgrade --noinput"
     user sentry_user
     group sentry_group
     action :run
   end
+
+  # EXPLICIT GUARD: if this is not the first run and a user already exists, trying to create a user errors
+  email = sentry_config['admin_email']
+  password = sentry_config['admin_password']
+  check_user_command = "echo 'from sentry.models import User; import sys; exit_code = 0 if User.objects.filter(email=\"#{email}\").exists() else 1; sys.exit(exit_code);' | SENTRY_CONF=#{node['sentry']['config_dir']} #{node['sentry']['install_dir']}/bin/sentry shell"
+  execute 'create sentry user' do
+    command "SENTRY_CONF=#{node['sentry']['config_dir']} #{node['sentry']['install_dir']}/bin/sentry createuser --email #{email.shellescape} --password #{password.shellescape} --superuser"
+    not_if check_user_command
+  end
+
 end

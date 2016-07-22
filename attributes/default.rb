@@ -75,7 +75,7 @@ default["sentry"]["config"]["force_script_name"] = false
 # smtp
 default["sentry"]["config"]["smtp_host"] = '0.0.0.0'
 default["sentry"]["config"]["smtp_port"] = '5587'
-default["sentry"]["config"]["smtp_hostname"] = 'localhost'  
+default["sentry"]["config"]["smtp_hostname"] = 'reply.getsentry.com'
 
 default["sentry"]["config"]["email_default_from"] = "#{node["sentry"]["user"]}@#{node[:fqdn]}"
 default["sentry"]["config"]["email_backend"] = "django.core.mail.backends.smtp.EmailBackend"

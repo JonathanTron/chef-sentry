@@ -47,6 +47,12 @@ mail.mailgun-api-key: '<%= mailgun_api_key %>'
 # A new key can be generated with `$ sentry config generate-secret-key`
 system.secret-key: '<%= @signing_token %>'
 
+# The URL prefix in which Sentry is accessible. This will be used both for referencing URLs in the UI,
+# as well as in outbound notifications.
+<% if @url_prefix %>
+system.url-prefix: <%= @url_prefix %>
+<% end %>
+
 # The ``redis.clusters`` setting is used, unsurprisingly, to configure Redis
 # clusters. These clusters can be then referred to by name when configuring
 # backends such as the cache, digests, or TSDB backend.

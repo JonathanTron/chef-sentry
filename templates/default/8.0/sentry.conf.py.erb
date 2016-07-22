@@ -167,11 +167,9 @@ SENTRY_FEATURES['auth:register'] = <%= @allow_registration ? 'True' : 'False' %>
 ## SMTP SERVER ##
 #################
 
-<% if @sentry_smtp_host -%>
-SENTRY_SMTP_HOST: '<%= @smtp_host %>'
-SENTRY_SMTP_PORT: '<%= @smtp_port %>'
-SENTRY_SMTP_HOSTNAME: '<%= @smtp_hostname %>'
-<% end -%>
+SENTRY_SMTP_HOST = '<%= @smtp_host %>'
+SENTRY_SMTP_PORT = <%= @smtp_port %>
+SENTRY_SMTP_HOSTNAME = '<%= @smtp_hostname %>'
 
 ###################
 ## DATA SAMPLING ##
