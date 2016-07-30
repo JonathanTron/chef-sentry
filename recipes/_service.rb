@@ -44,7 +44,7 @@ if node['sentry']['version'] .split('.')[0].to_i >= 8
       group: node["sentry"]["group"],
       sentry_cmd: "#{node["sentry"]["install_dir"]}/bin/sentry"
     })
-    sv_timeout 60
+    sv_timeout 180
     retries 2
     retry_delay 5
     action [:enable, :start]
