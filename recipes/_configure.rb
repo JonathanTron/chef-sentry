@@ -130,6 +130,9 @@ if node["sentry"]["version"].split(".")[0].to_i < 8
       tsdb: node["sentry"]["config"]["tsdb"],
       filestore: node["sentry"]["config"]["filestore"],
       filestore_options: node["sentry"]["config"]["filestore_options"],
+      # google sso
+      google_client_id: node['sentry']['google_client_id'],
+      google_client_secret: node['sentry']['google_client_secret'],
     })
   end
 
@@ -223,6 +226,9 @@ else
       tsdb: node["sentry"]["config"]["tsdb"],
       filestore: node["sentry"]["config"]["filestore"],
       filestore_options: node["sentry"]["config"]["filestore_options"],
+      # google sso
+      google_client_id: node['sentry']['google_client_id'],
+      google_client_secret: node['sentry']['google_client_secret'],
     })
   end
 

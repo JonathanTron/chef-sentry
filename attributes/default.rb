@@ -122,3 +122,7 @@ default["sentry"]["data_bag_item"] = "credentials"
 default["sentry"]["use_encrypted_data_bag"] = false
 
 default["sentry"]["manage_redis"] = true
+
+# google sso
+default['sentry']['google_client_id'] = false
+default['sentry']['google_client_secret'] = ''
