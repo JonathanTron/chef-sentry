@@ -207,7 +207,6 @@ else
       # smtp
       smtp_host: node["sentry"]["config"]["smtp_host"],
       smtp_port: node["sentry"]["config"]["smtp_port"],
-      smtp_hostname: node["sentry"]["config"]["smtp_hostname"],
 
       additional_apps: Array(node["sentry"]["config"]["additional_apps"]),
       prepend_middleware_classes: Array(node["sentry"]["config"]["prepend_middleware_classes"]),
@@ -243,7 +242,7 @@ else
       email_use_tls: node["sentry"]["config"]["email_use_tls"],
       email_backend: node["sentry"]["config"]["email_backend"], 
       email_enable_replies: node["sentry"]["config"]["email_enable_replies"],
-      email_reply_hostname: node["sentry"]["config"]["email_reply_hostname"],
+      email_reply_hostname: node["sentry"]["config"]["smtp_hostname"],
       mailgun_api_key: sentry_config["mailgun_api_key"],
       # redis
       redis_enabled: node["sentry"]["config"]["redis_enabled"],

@@ -169,7 +169,9 @@ SENTRY_FEATURES['auth:register'] = <%= @allow_registration ? 'True' : 'False' %>
 
 SENTRY_SMTP_HOST = '<%= @smtp_host %>'
 SENTRY_SMTP_PORT = <%= @smtp_port %>
+<% if @smtp_hostname %>
 SENTRY_SMTP_HOSTNAME = '<%= @smtp_hostname %>'
+<% end %>
 
 ###################
 ## DATA SAMPLING ##
@@ -180,7 +182,9 @@ SENTRY_SAMPLE_DATA = True
 <% end %>
 
 SENTRY_BEACON = <%= @beacon ? 'True' : 'False' %>
+<% if @admin_email %>
 SENTRY_ADMIN_EMAIL = '<%= @admin_email %>'
+<% end %>
 SENTRY_KEY = '<%= @signing_token %>'
 
 

@@ -53,6 +53,10 @@ system.secret-key: '<%= @signing_token %>'
 system.url-prefix: <%= @url_prefix %>
 <% end %>
 
+<% if @admin_email %>
+system.admin-email: <%= @admin_email %>
+<% end %>
+
 # The ``redis.clusters`` setting is used, unsurprisingly, to configure Redis
 # clusters. These clusters can be then referred to by name when configuring
 # backends such as the cache, digests, or TSDB backend.
