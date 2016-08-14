@@ -1,0 +1,212 @@
+# This file is just Python, with a touch of Django which means
+# you can inherit and tweak settings to your hearts content.
+from sentry.conf.server import *
+
+import os.path
+
+CONF_ROOT = os.path.dirname(__file__)
+
+DATABASES = {
+    'default': {
+        'ENGINE': '<%= @db_engine %>',
+        'NAME': '<%= @db_name %>',
+        'USER': '<%= @db_user %>',
+        'PASSWORD': '<%= @db_password %>',
+        'HOST': '<%= @db_host %>',
+        'PORT': '<%= @db_port %>',
+        'AUTOCOMMIT': <%= @db_options[:autocommit] ? 'True' : 'None' %>,
+        'ATOMIC_REQUESTS': <%= @db_options[:atomic_requests] ? 'True' : 'None' %>,
+    }
+}
+
+# You should not change this setting after your database has been created
+# unless you have altered all schemas first
+SENTRY_USE_BIG_INTS = <%= @use_big_ints ? 'True' : 'False' %>
+
+# If you're expecting any kind of real traffic on Sentry, we highly recommend
+# configuring the CACHES and Redis settings
+
+###########
+# General #
+###########
+
+# Instruct Sentry that this install intends to be run by a single organization
+# and thus various UI optimizations should be enabled.
+SENTRY_SINGLE_ORGANIZATION = <%= @single_organization ? 'True' : 'False' %>
+DEBUG = <%= @debug ? 'True' : 'False' %>
+
+###########
+## Cache ##
+###########
+
+# Sentry currently utilizes two separate mechanisms. While CACHES is not a
+# requirement, it will optimize several high throughput patterns.
+
+# If you wish to use memcached, install the dependencies and adjust the config
+# as shown:
+#
+#   pip install python-memcached
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': ['127.0.0.1:11211'],
+#     }
+# }
+
+# A primary cache is required for things such as processing events
+SENTRY_CACHE = '<%= @cache %>'
+
+###########
+## Queue ##
+###########
+
+# See https://docs.getsentry.com/on-premise/server/queue/ for more
+# information on configuring your queue broker and workers. Sentry relies
+# on a Python framework called Celery to manage queues.
+
+BROKER_URL = '<%= @broker_url %>'
+
+#################
+## Rate Limits ##
+#################
+
+# Rate limits apply to notification handlers and are enforced per-project
+# automatically.
+
+SENTRY_RATELIMITER = '<%= @ratelimiter %>'
+
+####################
+## Update Buffers ##
+####################
+
+# Buffers (combined with queueing) act as an intermediate layer between the
+# database and the storage API. They will greatly improve efficiency on large
+# numbers of the same events being sent to the API in a short amount of time.
+# (read: if you send any kind of real data to Sentry, you should enable buffers)
+
+SENTRY_BUFFER = '<%= @buffer %>'
+
+############
+## Quotas ##
+############
+
+# Quotas allow you to rate limit individual projects or the Sentry install as
+# a whole.
+
+SENTRY_QUOTAS = '<%= @quotas %>'
+
+##########
+## TSDB ##
+##########
+
+# The TSDB is used for building charts as well as making things like per-rate
+# alerts possible.
+
+SENTRY_TSDB = '<%= @tsdb %>'
+
+###########
+# Digests #
+###########
+
+# The digest backend powers notification summaries.
+
+SENTRY_DIGESTS = '<%= @digests %>'
+
+##################
+## File storage ##
+##################
+
+# Any Django storage backend is compatible with Sentry. For more solutions see
+# the django-storages package: https://django-storages.readthedocs.org/en/latest/
+
+SENTRY_FILESTORE = '<%= @filestore %>'
+SENTRY_FILESTORE_OPTIONS = <%= python_hash_string @filestore_options %>
+
+################
+## Web Server ##
+################
+
+# If you're using a reverse SSL proxy, you should enable the X-Forwarded-Proto
+# header and uncomment the following settings
+<% if @secure_proxy_ssl_header %>
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+<% else %>
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+<% end %>
+
+# If you're not hosting at the root of your web server,
+# you need to uncomment and set it to the path where Sentry is hosted.
+<% if @force_script_name -%>
+FORCE_SCRIPT_NAME = '<%= @force_script_name %>'
+<% else %>
+# FORCE_SCRIPT_NAME = '/sentry'
+<% end -%>
+
+SENTRY_WEB_HOST = '<%= @web_host %>'
+SENTRY_WEB_PORT = <%= @web_port %>
+SENTRY_WEB_OPTIONS = <%= python_hash_string @web_options %>
+
+###################
+## Other options ##
+###################
+
+##########
+## Auth ##
+##########
+
+SENTRY_PUBLIC = <%= @public ? 'True' : 'False' %>
+SENTRY_ALLOW_ORIGIN = <%= @allow_origin ? @allow_origin : 'None' %>
+SENTRY_FEATURES['auth:register'] = <%= @allow_registration ? 'True' : 'False' %>
+
+#################
+## SMTP SERVER ##
+#################
+
+SENTRY_SMTP_HOST = '<%= @smtp_host %>'
+SENTRY_SMTP_PORT = <%= @smtp_port %>
+<% if @smtp_hostname %>
+SENTRY_SMTP_HOSTNAME = '<%= @smtp_hostname %>'
+<% end %>
+
+###################
+## DATA SAMPLING ##
+###################
+
+<% if @sample_data -%>
+SENTRY_SAMPLE_DATA = True
+<% end %>
+
+SENTRY_BEACON = <%= @beacon ? 'True' : 'False' %>
+<% if @admin_email %>
+SENTRY_ADMIN_EMAIL = '<%= @admin_email %>'
+<% end %>
+SENTRY_KEY = '<%= @signing_token %>'
+
+
+<% if @additional_apps.any? -%>
+INSTALLED_APPS = INSTALLED_APPS + (
+  <%= @additional_apps.map{|app| "'#{app}'"}.join ",\n  "%>,
+)
+<% end %>
+
+<% if @prepend_middleware_classes.any? -%>
+MIDDLEWARE_CLASSES = (
+  <%= @prepend_middleware_classes.map{|middleware| "'#{middleware}'"}.join ",\n  " %>,
+) + MIDDLEWARE_CLASSES
+<% end -%>
+<% if @append_middleware_classes.any? -%>
+
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+  <%= @append_middleware_classes.map{|middleware| "'#{middleware}'"}.join ",\n  " %>,
+)
+<% end -%>
+
+<% if @google_client_id %>
+GOOGLE_CLIENT_ID = '<%= @google_client_id %>'
+GOOGLE_CLIENT_SECRET = '<%= @google_client_secret %>'
+<% end %>

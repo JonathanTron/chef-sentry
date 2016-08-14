@@ -164,3 +164,9 @@ MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
   <%= @append_middleware_classes.map{|middleware| "'#{middleware}'"}.join ",\n  " %>,
 )
 <% end -%>
+
+<% if @google_client_id %>
+    GOOGLE_CLIENT_ID = '<%= @google_client_id %>'
+    GOOGLE_CLIENT_SECRET = '<%= @google_client_secret %>'
+<% end %>
+

@@ -1,0 +1,73 @@
+# While a lot of configuration in Sentry can be changed via the UI, for all
+# new-style config (as of 8.0) you can also declare values here in this file
+# to enforce defaults or to ensure they cannot be changed via the UI. For more
+# information see the Sentry documentation.
+
+###############
+# Mail Server #
+###############
+
+mail.backend: <%= @email_backend %>  # Use dummy if you want to disable email entirely
+mail.host: '<%= @email_host %>'
+mail.port: <%= @email_port %>
+mail.username: '<%= @email_user || '' %>'
+mail.password: '<%= @email_password || '' %>'
+mail.use-tls: <%= @email_use_tls ? true : false %>
+# The email address to send on behalf of
+mail.from: '<%= @email_default_from %>' 
+
+# If you'd like to configure email replies, enable this.
+<% if @email_enable_replies %>
+mail.enable-replies: true
+<% else %>
+# mail.enable-replies: false
+<% end %>
+
+# When email-replies are enabled, this value is used in the Reply-To header
+<% if @email_reply_hostname %>
+mail.reply-hostname: '<%= @email_reply_hostname %>'
+<% else %>
+# mail.reply-hostname: ''
+<% end %>
+
+# If you're using mailgun for inbound mail, set your API key and configure a
+# route to forward to /api/hooks/mailgun/inbound/
+<% if @mailgun_api_key %>
+mail.mailgun-api-key: '<%= mailgun_api_key %>'
+<% else %>
+# mail.mailgun-api-key: ''
+<% end %>
+
+###################
+# System Settings #
+###################
+
+# If this file ever becomes compromised, it's important to regenerate your a new key
+# Changing this value will result in all current sessions being invalidated.
+# A new key can be generated with `$ sentry config generate-secret-key`
+system.secret-key: '<%= @signing_token %>'
+
+# The URL prefix in which Sentry is accessible. This will be used both for referencing URLs in the UI,
+# as well as in outbound notifications.
+<% if @url_prefix %>
+system.url-prefix: <%= @url_prefix %>
+<% end %>
+
+<% if @admin_email %>
+system.admin-email: <%= @admin_email %>
+<% end %>
+
+# The ``redis.clusters`` setting is used, unsurprisingly, to configure Redis
+# clusters. These clusters can be then referred to by name when configuring
+# backends such as the cache, digests, or TSDB backend.
+redis.clusters:
+  <% @redis_config["hosts"].each_with_index do |(key, hash), index | %>
+  <%= hash[:name] %>:
+    hosts:
+      <%= index %>:
+        host: <%= hash[:host] %>
+        port: <%= hash[:port] %>
+        <% if hash[:password] %>
+        password: hash[:password]
+        <% end %>
+  <% end %>
