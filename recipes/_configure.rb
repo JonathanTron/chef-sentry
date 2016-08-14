@@ -79,7 +79,7 @@ directory node["sentry"]["config_dir"] do
   action :create
 end
 
-# redis and email configs move to conifg.yml in version 8
+# redis and email configs move to config.yml in version 8
 if node["sentry"]["version"].split(".")[0].to_i < 8
   template node["sentry"]["config_file_path"] do
     source "sentry.conf.py.erb"
@@ -233,7 +233,7 @@ else
   end
 
   # new config file starting in 8.0
-  template node["sentry"]["config_yaml_path"] do 
+  template node["sentry"]["config_yaml_path"] do
     source "8.0/conf.yml.erb"
     owner sentry_user
     group sentry_group
@@ -246,7 +246,7 @@ else
       email_user: sentry_config["email_host_user"],
       email_password: sentry_config["email_host_password"],
       email_use_tls: node["sentry"]["config"]["email_use_tls"],
-      email_backend: node["sentry"]["config"]["email_backend"], 
+      email_backend: node["sentry"]["config"]["email_backend"],
       email_enable_replies: node["sentry"]["config"]["email_enable_replies"],
       email_reply_hostname: node["sentry"]["config"]["smtp_hostname"],
       mailgun_api_key: sentry_config["mailgun_api_key"],

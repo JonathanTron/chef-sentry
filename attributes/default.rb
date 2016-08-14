@@ -18,7 +18,7 @@
 #
 
 include_attribute "python::default"
-default["sentry"]["version"] = "7.7.1"
+default["sentry"]["version"] = "8.6.0"
 default["sentry"]["user"] = "sentry"
 default["sentry"]["group"] = "sentry"
 default["sentry"]["pipname"] = "sentry"
@@ -49,7 +49,7 @@ default["sentry"]["config_yaml_path"] = "#{node["sentry"]["config_dir"]}/config.
 
 # ENV variables for runit
 default["sentry"]["env_d_path"] = "/etc/sentry.d"
-default["sentry"]["env_path"] = "#{node["sentry"]["env_d_path"]}/env" 
+default["sentry"]["env_path"] = "#{node["sentry"]["env_d_path"]}/env"
 
 default["sentry"]["config"]["db_engine"] = "django.db.backends.postgresql_psycopg2"
 default["sentry"]["config"]["db_options"] = {autocommit: true}

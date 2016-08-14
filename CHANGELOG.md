@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of sentry.
 
+## 0.3.0 (2016-08-14)
+
+* Default to Sentry 8.6.0
+* Add Sentry 8.6 support (Matt Leick)
+  [#9](https://github.com/JonathanTron/chef-sentry/pull/9)
+
 ## 0.2.2 (2016-02-17)
 
 * Add support for Sentry 8.x

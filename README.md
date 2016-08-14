@@ -19,7 +19,7 @@ Attributes
 
 | Key | Type | Description | Default |
 |-----|------|-------------|---------|
-| `['sentry']['version']` | String | which version to install | `"7.7.1" **` |
+| `['sentry']['version']` | String | which version to install | `"8.6.0" **` |
 | `['sentry']['pipname']` | String | which package to install | `"sentry[postgres]"` |
 | `['sentry']['plugins']` | Array | list of plugins to install: ``` [ "sentry-irc", # No version specified ["sentry-github", "0.1.2"], # With explicit version specified ] ``` | `[["django-secure", "1.0.1"], ["django-bcrypt", "0.9.2"], ["django-sendmail-backend", "0.1.2"]]` |
 | `["dependency"]["packages"]` | Array | list of packages to install | `["libxml2-dev", "libxslt1-dev", "libffi-dev",]` |
@@ -126,8 +126,14 @@ Contributing
 License and Authors
 -------------------
 
-Author:: Jonathan Tron (<jonathan@openhood.com>)
-Author:: Nilanjan Roy (<nilanjan.roy@nosto.com>)
+Primary authors:
+
+- Jonathan Tron (@JonathanTron)
+
+Contributors:
+
+- Nilanjan Roy (@nilroy)
+- Matt Leick (@mattlock12)
 
 Copyright 2013, Openhood S.E.N.C.
 
