@@ -44,7 +44,7 @@ default["sentry"]["install_dir"] = "/opt/sentry"
 default["sentry"]["filestore_dir"] = "/opt/sentry/data"
 default["sentry"]["config_dir"] = "#{node["sentry"]["install_dir"]}/etc"
 default["sentry"]["config_file_path"] = "#{node["sentry"]["config_dir"]}/config.py"
-default["sentry"]["config_python_path"] = "#{node["sentry"]["config_dir"]}/sentry.config.py"
+default["sentry"]["config_python_path"] = "#{node["sentry"]["config_dir"]}/sentry.conf.py"
 default["sentry"]["config_yaml_path"] = "#{node["sentry"]["config_dir"]}/config.yml"
 
 # ENV variables for runit

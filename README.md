@@ -28,7 +28,9 @@ Attributes
 | `['sentry']['install_dir']` | String | full path to the sentry install directory | `"/opt/sentry/"` |
 | `['sentry']['filestore_dir']` | String | full path to the sentry filestore directory | `"/opt/sentry/data"` |
 | `['sentry']['config_dir']` | String | path to sentry config directory | `"/opt/sentry/etc"` |
-| `['sentry']['config_file_path']` | String | path to sentry config file | `"/opt/sentry/etc/config.py"` |
+| `['sentry']['config_file_path']` | String | path to sentry config file for Sentry < 8.0 | `"/opt/sentry/etc/config.py"` |
+| `['sentry']['config_python_path']` | String | path to sentry config file for Sentry >= 8.0 | `"/opt/sentry/etc/sentry.conf.py"` |
+| `['sentry']['config_yaml_path']` | String | path to sentry yaml config file for Sentry >= 8.0 | `"/opt/sentry/etc/config.yml"` |
 | `['sentry']['env_d_path']` | String | path to the daemontool's env.d path for sentry configurations | `"/etc/sentry.d"` |
 | `['sentry']['env_path']` | String | path to the daemontool's env path for sentry configurations | `"/etc/sentry.d/env"` |
 | `['sentry']['config']['url_prefix']` | String | URL where sentry will be accessible | `"http://localhost"` |

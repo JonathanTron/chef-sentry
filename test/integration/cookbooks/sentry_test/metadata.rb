@@ -2,4 +2,4 @@ name "sentry_test"
 
 depends "sentry"
 depends "redisio"
-depends "postgresql", "= 2.4.0"
+depends "postgresql", "= 4.0.6"

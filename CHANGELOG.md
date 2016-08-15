@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of sentry.
 
-## 0.3.0 (2016-08-14)
+## dev
 
 * Default to Sentry 8.6.0
 * Add Sentry 8.6 support (Matt Leick)

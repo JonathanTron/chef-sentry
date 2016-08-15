@@ -25,6 +25,12 @@ include_recipe "postgresql::client"
 include_recipe "postgresql::ruby" # So that postgresql tests pass...
 include_recipe "postgresql::server"
 
+node.default["redisio"]["package_install"] = true
+node.default["redisio"]["version"] = nil
+
+include_recipe "redisio"
+include_recipe "redisio::enable"
+
 package "postfix"
 node.override["sentry"]["config"]["email_default_from"] = "sentry@example.com"
 

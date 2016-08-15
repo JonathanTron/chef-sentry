@@ -103,7 +103,7 @@ else # using sentry commands: 'start' & 'celery'
       subscribes :restart, res, :delayed
     end
   end
-  
+
   runit_service "sentry_queue" do
     options({
       virtualenv_activate: "#{node["sentry"]["install_dir"]}/bin/activate",
