@@ -241,7 +241,7 @@ else
     variables({
       # email
       email_default_from: node["sentry"]["config"]["email_default_from"],
-      email_host: node["sentry"]["email_host"],
+      email_host: node["sentry"]["config"]["email_host"],
       email_port: node["sentry"]["config"]["email_port"],
       email_user: sentry_config["email_host_user"],
       email_password: sentry_config["email_host_password"],
