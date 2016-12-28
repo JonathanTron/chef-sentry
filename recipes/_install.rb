@@ -37,11 +37,13 @@ end
 directory node["sentry"]["install_dir"] do
   owner sentry_user
   group sentry_group
+  recursive true
 end
 
 directory node["sentry"]["filestore_dir"] do
   owner sentry_user
   group sentry_group
+  recursive true
 end
 
 # Create a virtualenv for sentry
