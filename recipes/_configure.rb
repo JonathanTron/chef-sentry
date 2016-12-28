@@ -77,6 +77,7 @@ directory node["sentry"]["config_dir"] do
   group sentry_group
   mode "750"
   action :create
+  recursive true
 end
 
 # redis and email configs move to config.yml in version 8
