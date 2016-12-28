@@ -10,7 +10,7 @@ Requirements
 - `ubuntu` - sentry has only been tested on ubuntu
 
 #### cookbooks
-- `python` - for `python`, `virtualenv` and `pip` installation and LWRP.
+- `poise-python` - for `python`, `virtualenv` and `pip` installation and LWRP.
 
 Attributes
 ----------
