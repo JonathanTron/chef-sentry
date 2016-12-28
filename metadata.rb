@@ -6,8 +6,8 @@ description      "Installs/Configures Sentry realtime error logging and aggregat
 long_description IO.read(File.join(File.dirname(__FILE__), "README.md"))
 version          "0.3.0"
 
-supports "ubuntu"
+supports 'ubuntu'
 
-depends "python"
-depends "runit", ">= 1.1.6"
-suggests "redisio"
+depends 'poise-python'
+depends 'runit', '>= 1.1.6'
+suggests 'redisio'

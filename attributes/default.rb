@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_attribute "python::default"
+include_attribute "poise-python::default"
 default["sentry"]["version"] = "8.6.0"
 default["sentry"]["user"] = "sentry"
 default["sentry"]["group"] = "sentry"

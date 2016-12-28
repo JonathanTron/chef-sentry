@@ -21,15 +21,15 @@ include_recipe "runit"
 
 subscribes_resources = [
    "template[#{node["sentry"]["config_file_path"]}]",
-   "python_pip[#{node["sentry"]["pipname"]}]"
+   "python_package[#{node["sentry"]["pipname"]}]"
  ] +
    node["sentry"]["database"]["pipdeps"].map do |dep|
      dep_name, _ = dep
-     "python_pip[#{dep_name}]"
+     "python_package[#{dep_name}]"
    end +
    node["sentry"]["plugins"].map do |plugin|
      plugin_name, _ = plugin
-     "python_pip[#{plugin_name}]"
+     "python_package[#{plugin_name}]"
    end
 
 # sentry 'start' and 'celery' were deprecated in 8.0 in favor of
