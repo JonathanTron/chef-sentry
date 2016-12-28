@@ -71,6 +71,15 @@ end
 
 end
 
+# Prepare sentry config directory
+directory node["sentry"]["config_dir"] do
+  owner sentry_user
+  group sentry_group
+  mode "750"
+  action :create
+  recursive true
+end
+
 # redis and email configs move to config.yml in version 8
 if node["sentry"]["version"].split(".")[0].to_i < 8
   template node["sentry"]["config_file_path"] do

@@ -46,15 +46,6 @@ directory node["sentry"]["filestore_dir"] do
   recursive true
 end
 
-# Prepare sentry config directory
-directory node["sentry"]["config_dir"] do
-  owner sentry_user
-  group sentry_group
-  mode "750"
-  action :create
-  recursive true
-end
-
 # Create a virtualenv for sentry
 python_virtualenv node["sentry"]["install_dir"] do
   user sentry_user
