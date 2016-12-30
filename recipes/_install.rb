@@ -21,7 +21,7 @@ if node["sentry"]["manage_redis"]
   include_recipe "sentry::_redis"
 end
 
-include_recipe "python"
+include_recipe "poise-python"
 
 sentry_user = node["sentry"]["user"]
 sentry_group = node["sentry"]["group"]
@@ -37,16 +37,18 @@ end
 directory node["sentry"]["install_dir"] do
   owner sentry_user
   group sentry_group
+  recursive true
 end
 
 directory node["sentry"]["filestore_dir"] do
   owner sentry_user
   group sentry_group
+  recursive true
 end
 
 # Create a virtualenv for sentry
 python_virtualenv node["sentry"]["install_dir"] do
-  owner sentry_user
+  user sentry_user
   group sentry_group
   action :create
 end
@@ -57,7 +59,7 @@ node["sentry"]["dependency"]["packages"].each do |name|
 end
 
 # Install sentry via pip in virtualenv
-python_pip node["sentry"]["pipname"] do
+python_package node["sentry"]["pipname"] do
   virtualenv node["sentry"]["install_dir"]
   version node["sentry"]["version"]
   user sentry_user
@@ -68,7 +70,7 @@ end
 node["sentry"]["database"]["pipdeps"].each do |dep|
   dep_name, dep_version = dep
 
-  python_pip dep_name do
+  python_package dep_name do
     virtualenv node["sentry"]["install_dir"]
     version dep_version
     user sentry_user
@@ -80,7 +82,7 @@ end
 node["sentry"]["plugins"].each do |plugin|
   plugin_name, plugin_version = plugin
 
-  python_pip plugin_name do
+  python_package plugin_name do
     virtualenv node["sentry"]["install_dir"]
     version plugin_version
     user sentry_user
