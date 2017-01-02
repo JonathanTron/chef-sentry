@@ -2,7 +2,14 @@
 
 This file is used to list changes made in each version of sentry.
 
-## dev
+## 0.3.1 (2017-01-02)
+
+* Ensure parent install directory is created too (Nilanjan Roy)
+  [#14](https://github.com/JonathanTron/chef-sentry/issues/14)
+* Depends on `poise-python` cookbook instead of `python` (Nilanjan Roy)
+  [#15](https://github.com/JonathanTron/chef-sentry/pull/15)
+
+## 0.3.0 (2016-08-14)
 
 * Default to Sentry 8.6.0
 * Add Sentry 8.6 support (Matt Leick)
