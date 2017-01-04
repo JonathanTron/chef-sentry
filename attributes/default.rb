@@ -104,7 +104,7 @@ default["sentry"]["config"]["celery_always_eager"] = false # true will disable q
 default["sentry"]["config"]["broker_url"] = "redis://localhost:6379"
 default["sentry"]["config"]["celeryd_concurrency"] = 1
 default["sentry"]["config"]["celery_send_events"] = false
-default["sentry"]["config"]["celerybeat_schedule_filename"] = "#{default["sentry"]["filestore_dir"]}/celery_beat_schedule"
+default["sentry"]["config"]["celerybeat_schedule_filename"] = "#{node["sentry"]["filestore_dir"]}/celery_beat_schedule"
 #digests config
 default["sentry"]["config"]["digests"] = 'sentry.digests.backends.redis.RedisBackend'
 default["sentry"]["config"]["ratelimiter"] = "sentry.ratelimits.redis.RedisRateLimiter"
@@ -113,7 +113,7 @@ default["sentry"]["config"]["quotas"] = "sentry.quotas.redis.RedisQuota"
 default["sentry"]["config"]["tsdb"] = "sentry.tsdb.redis.RedisTSDB"
 # Filestore config
 default["sentry"]["config"]["filestore"] = "django.core.files.storage.FileSystemStorage"
-default["sentry"]["config"]["filestore_options"]["location"] = default["sentry"]["filestore_dir"]
+default["sentry"]["config"]["filestore_options"]["location"] = node["sentry"]["filestore_dir"]
 # data sampling
 default["sentry"]["config"]["sample_data"] = false
 
