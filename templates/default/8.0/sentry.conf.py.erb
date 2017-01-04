@@ -113,6 +113,8 @@ SENTRY_TSDB = '<%= @tsdb %>'
 
 SENTRY_DIGESTS = '<%= @digests %>'
 
+<%# https://github.com/getsentry/sentry/issues/4537 for newer Sentry this setting is moved to config YAML %>
+<% if Gem::Version.new(node['sentry']['version']) < Gem::Version.new('8.10') %>
 ##################
 ## File storage ##
 ##################
@@ -122,6 +124,7 @@ SENTRY_DIGESTS = '<%= @digests %>'
 
 SENTRY_FILESTORE = '<%= @filestore %>'
 SENTRY_FILESTORE_OPTIONS = <%= python_hash_string @filestore_options %>
+<% end %>
 
 ################
 ## Web Server ##
