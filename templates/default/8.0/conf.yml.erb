@@ -71,3 +71,14 @@ redis.clusters:
         password: hash[:password]
         <% end %>
   <% end %>
+<%# https://github.com/getsentry/sentry/issues/4537 %>
+<% if Gem::Version.new(node['sentry']['version']) >= Gem::Version.new('8.10') %>
+##################
+## File storage ##
+##################
+# Any Django storage backend is compatible with Sentry. For more solutions see
+# the django-storages package: https://django-storages.readthedocs.org/en/latest/
+
+filestore.backend: '<%= node["sentry"]["config"]["filestore"] %>'
+filestore.options: <%= python_hash_string node["sentry"]["config"]["filestore_options"] %>
+<% end %>
