@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of sentry.
 
-## dev
+## 0.3.2 (2017-05-26)
 
 * Construct `default["sentry"]["config"]["celerybeat_schedule_filename"]` and
   `default["sentry"]["config"]["filestore_options"]["location"]` from
