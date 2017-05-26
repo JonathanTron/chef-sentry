@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'berkshelf', '~> 6.0'
 gem 'rake'
-gem 'emeril'
+gem 'stove'
 
 group :integration do
   gem "chef", "~> 12.0"
