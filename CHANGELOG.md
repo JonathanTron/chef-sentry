@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of sentry.
 
+## dev
+
+* Update File storage setting for Sentry 8.10 compatibility (Luka Lüdicke)
+  [#20](https://github.com/JonathanTron/chef-sentry/pull/20)
+  [#17](https://github.com/JonathanTron/chef-sentry/issues/17)
+
 ## 0.3.1 (2017-01-02)
 
 * Ensure parent install directory is created too (Nilanjan Roy)

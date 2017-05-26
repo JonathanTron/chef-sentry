@@ -136,6 +136,7 @@ Contributors:
 
 - Nilanjan Roy (@nilroy)
 - Matt Leick (@mattlock12)
+- Luka Lüdicke (@klyonrad)
 
 Copyright 2013, Openhood S.E.N.C.
 
