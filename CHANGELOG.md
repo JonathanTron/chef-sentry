@@ -4,6 +4,10 @@ This file is used to list changes made in each version of sentry.
 
 ## dev
 
+* Construct `default["sentry"]["config"]["celerybeat_schedule_filename"]` and
+  `default["sentry"]["config"]["filestore_options"]["location"]` from
+  `node["sentry"]["filestore_dir"]` (Luka Lüdicke)
+  [#21](https://github.com/JonathanTron/chef-sentry/pull/21)
 * Update File storage setting for Sentry 8.10 compatibility (Luka Lüdicke)
   [#20](https://github.com/JonathanTron/chef-sentry/pull/20)
   [#17](https://github.com/JonathanTron/chef-sentry/issues/17)
