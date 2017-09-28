@@ -25,7 +25,6 @@ default["sentry"]["pipname"] = "sentry"
 default["sentry"]["database"]["pipdeps"] = []
 default["sentry"]["plugins"] = [
   ["sentry-plugins", "8.20.0"],
-  ["django-secure", "1.0.1"],
   ["django-bcrypt", "0.9.2"],
   ["django-sendmail-backend", "0.1.2"],
 ]
@@ -86,8 +85,8 @@ default["sentry"]["config"]["email_use_tls"] = false
 default["sentry"]["config"]["email_subject_prefix"] = nil
 default["sentry"]["config"]["email_list_namespace"] = "localhost"
 default["sentry"]["config"]["email_enable_replies"] = false
-default["sentry"]["config"]["additional_apps"] = ["djangosecure", "django_bcrypt"]
-default["sentry"]["config"]["prepend_middleware_classes"] = ["djangosecure.middleware.SecurityMiddleware"]
+default["sentry"]["config"]["additional_apps"] = ["django_bcrypt"]
+default["sentry"]["config"]["prepend_middleware_classes"] = []
 default["sentry"]["config"]["append_middleware_classes"] = []
 # general
 default["sentry"]["config"]["use_big_ints"] = true
