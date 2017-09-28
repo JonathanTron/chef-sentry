@@ -63,6 +63,14 @@ directory sentry_env_path do
   action :create
 end
 
+file "#{sentry_env_path}/SENTRY_CONF" do
+  owner "root"
+  group sentry_group
+  mode "750"
+  action :create
+  content node["sentry"]["config_dir"]
+end
+
 # set env variables for runit to use
 (sentry_config["additional_env_vars"] || {}).each do |key, value|
   file "#{sentry_env_path}/#{key.to_s.upcase}" do
@@ -72,7 +80,6 @@ end
     action :create
     content value
   end
-
 end
 
 # Prepare sentry config directory

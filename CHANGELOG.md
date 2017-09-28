@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of sentry.
 
+## 0.4.3 (2017-09-28)
+
+* Ensure SENTRY_CONF is set in runit env
+
 ## 0.4.2 (2017-09-28)
 
 * Remove django-secure as it's imcompatible with latest django
