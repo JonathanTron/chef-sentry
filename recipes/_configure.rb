@@ -33,7 +33,11 @@ end
 
 sentry_env_path = node["sentry"]["env_path"]
 if node["sentry"]["use_encrypted_data_bag"]
-  secret = Chef::EncryptedDataBagItem.load_secret("#{node["sentry"]["data_bag_secret"]}")
+  secret = if node["sentry"]["data_bag_secret"]
+    Chef::EncryptedDataBagItem.load_secret("#{node["sentry"]["data_bag_secret"]}")
+  else
+    nil
+  end
   sentry_config = Chef::EncryptedDataBagItem.load(
     node["sentry"]["data_bag"],
     node["sentry"]["data_bag_item"],

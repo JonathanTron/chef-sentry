@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of sentry.
 
+## 0.4.1 (2017-09-28)
+
+* Fix a bug when using encrypted data bags and `node["sentry"]["data_bag_secret"]`
+  is not set.
+
 ## 0.4.0 (2017-09-28)
 
 * Update Sentry to 8.20.0
