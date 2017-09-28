@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of sentry.
 
+## 0.4.0 (2017-09-28)
+
+* Update Sentry to 8.20.0
+
 ## 0.3.2 (2017-05-26)
 
 * Construct `default["sentry"]["config"]["celerybeat_schedule_filename"]` and

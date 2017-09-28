@@ -19,11 +19,19 @@
 
 include_recipe "apt"
 
+node.override["postgresql"]["version"] = "9.6"
+node.override["postgresql"]["dir"] = "/etc/postgresql/9.6/main"
+node.override["postgresql"]["client"]["packages"] = ["postgresql-client-9.6", "libpq-dev"]
+node.override["postgresql"]["server"]["packages"] = ["postgresql-9.6"]
+node.override["postgresql"]["contrib"]["packages"] = ["postgresql-contrib-9.6"]
+node.override["postgresql"]["contrib"]["extensions"] = ["citext"]
+
 node.override["postgresql"]["password"]["postgres"] = "test"
 
 include_recipe "postgresql::client"
 include_recipe "postgresql::ruby" # So that postgresql tests pass...
 include_recipe "postgresql::server"
+include_recipe "postgresql::contrib" # For citext extension required by sentry...
 
 package "postfix"
 node.override["sentry"]["config"]["email_default_from"] = "sentry@example.com"

@@ -6,7 +6,7 @@ gem 'stove'
 
 group :integration do
   gem "chef", "~> 12.0"
-  gem "test-kitchen", "~> 1.16"
-  gem "kitchen-vagrant"
+  gem "test-kitchen", "~> 1.17"
+  gem "kitchen-docker"
   gem "thor-foodcritic"
 end

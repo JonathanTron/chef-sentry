@@ -18,12 +18,13 @@
 #
 
 include_attribute "poise-python::default"
-default["sentry"]["version"] = "8.6.0"
+default["sentry"]["version"] = "8.20.0"
 default["sentry"]["user"] = "sentry"
 default["sentry"]["group"] = "sentry"
 default["sentry"]["pipname"] = "sentry"
 default["sentry"]["database"]["pipdeps"] = []
 default["sentry"]["plugins"] = [
+  ["sentry-plugins", "8.20.0"],
   ["django-secure", "1.0.1"],
   ["django-bcrypt", "0.9.2"],
   ["django-sendmail-backend", "0.1.2"],

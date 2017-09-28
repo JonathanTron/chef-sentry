@@ -1,12 +1,11 @@
 ---
 driver:
   name: docker
-  driver_config:
-    use_sudo: false
+  use_sudo: false
 
 provisioner:
   name: chef_solo
-  require_chef_omnibus: true
+  require_chef_omnibus: "12.6.0"
 
 platforms:
   - name: ubuntu-12.04
@@ -17,6 +16,11 @@ suites:
     - "recipe[chef-solo-search]"
     - "recipe[sentry_test::default]"
     - "recipe[minitest-handler]"
+    attributes:
+      redisio:
+        package_install: false
+        safe_install: false
+        version: 2.8.20
 
   - name: encrypted_databag
     run_list:
