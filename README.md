@@ -52,6 +52,16 @@ Attributes
 | `['sentry']['data_bag_item']` | String | name of the data_bag's item holding the credentials | `"credentials"` |
 | `['sentry']['use_encrypted_data_bag']` | Boolean | if the data_bag is expected to be encrypted or not | `false` |
 | `['sentry']['data_bag_secret']` | String | Path to the databag secret file when using an encrypted databag, if nil the value from `Chef::Config[:encrypted_data_bag_secret]` is used. | `nil` |
+| `['sentry']['config']['social_auth_redirect_is_https']` | Boolean | Set this to true if your sentry installation is accessible via HTTPs and you'rs using any of the SSO integration | `false` |
+| `['sentry']['google_client_id']` | String | Google SSO client ID | `nil` |
+| `['sentry']['google_client_secret']` | String | Google SSO client secret | `nil` |
+| `['sentry']['github_app_id']` | String | Github integration app ID | `nil` |
+| `['sentry']['github_api_secret']` | String | Github integration api secret | `nil` |
+| `['sentry']['asana_client_id']` | String | Asana integration client ID | `nil` |
+| `['sentry']['asana_client_secret']` | String | Asana integration client secret | `nil` |
+| `['sentry']['visualstudio_app_id']` | String | Visual Studio integration app ID | `nil` |
+| `['sentry']['visualstudio_app_secret']` | String | Visual Studio integration app secret | `nil` |
+| `['sentry']['visualstudio_client_secret']` | String | Visual Studio integration client secret | `nil` |
 
 ****NOTE** Versions prior to 7.7.x are having trouble running sentry upgrade command. It throws below error:
 

@@ -142,9 +142,21 @@ if node["sentry"]["version"].split(".")[0].to_i < 8
       tsdb: node["sentry"]["config"]["tsdb"],
       filestore: node["sentry"]["config"]["filestore"],
       filestore_options: node["sentry"]["config"]["filestore_options"],
+      # sentry-plugins integrations
+      social_auth_redirect_is_https: node["sentry"]["config"]["social_auth_redirect_is_https"],
       # google sso
       google_client_id: node['sentry']['google_client_id'],
       google_client_secret: node['sentry']['google_client_secret'],
+      # github sso
+      github_app_id: node["sentry"]["github_app_id"],
+      github_api_secret: node["sentry"]["github_api_secret"],
+      # asana sso
+      asana_client_id: node["sentry"]["asana_client_id"],
+      asana_client_secret: node["sentry"]["asana_client_secret"],
+      # visual studio sso
+      visualstudio_app_id: node["sentry"]["visualstudio_app_id"],
+      visualstudio_app_secret: node["sentry"]["visualstudio_app_secret"],
+      visualstudio_client_secret: node["sentry"]["visualstudio_client_secret"],
     })
   end
 
@@ -238,9 +250,21 @@ else
       tsdb: node["sentry"]["config"]["tsdb"],
       filestore: node["sentry"]["config"]["filestore"],
       filestore_options: node["sentry"]["config"]["filestore_options"],
+      # sentry-plugins integrations
+      social_auth_redirect_is_https: node["sentry"]["config"]["social_auth_redirect_is_https"],
       # google sso
       google_client_id: node['sentry']['google_client_id'],
       google_client_secret: node['sentry']['google_client_secret'],
+      # github sso
+      github_app_id: node["sentry"]["github_app_id"],
+      github_api_secret: node["sentry"]["github_api_secret"],
+      # asana sso
+      asana_client_id: node["sentry"]["asana_client_id"],
+      asana_client_secret: node["sentry"]["asana_client_secret"],
+      # visual studio sso
+      visualstudio_app_id: node["sentry"]["visualstudio_app_id"],
+      visualstudio_app_secret: node["sentry"]["visualstudio_app_secret"],
+      visualstudio_client_secret: node["sentry"]["visualstudio_client_secret"],
     })
   end
 

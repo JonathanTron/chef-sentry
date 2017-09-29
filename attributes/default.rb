@@ -123,6 +123,22 @@ default["sentry"]["use_encrypted_data_bag"] = false
 
 default["sentry"]["manage_redis"] = true
 
+# sentry-plugins integrations
+default["sentry"]["config"]["social_auth_redirect_is_https"] = false
+
 # google sso
-default['sentry']['google_client_id'] = false
-default['sentry']['google_client_secret'] = ''
+default["sentry"]["google_client_id"] = nil
+default["sentry"]["google_client_secret"] = nil
+
+# github sso
+default["sentry"]["github_app_id"] = nil
+default["sentry"]["github_api_secret"] = nil
+
+# asana sso
+default["sentry"]["asana_client_id"] = nil
+default["sentry"]["asana_client_secret"] = nil
+
+# visual studio sso
+default["sentry"]["visualstudio_app_id"] = nil
+default["sentry"]["visualstudio_app_secret"] = nil
+default["sentry"]["visualstudio_client_secret"] = nil

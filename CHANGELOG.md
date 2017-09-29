@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of sentry.
 
+## 0.4.4 (2017-09-29)
+
+* Allow configuration of sentry-plugins SSOs
+
 ## 0.4.3 (2017-09-28)
 
 * Ensure SENTRY_CONF is set in runit env

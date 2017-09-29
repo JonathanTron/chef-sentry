@@ -209,7 +209,33 @@ MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
 )
 <% end -%>
 
-<% if @google_client_id %>
+####################
+## SENTRY PLUGINS ##
+####################
+
+<% if @social_auth_redirect_is_https -%>
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+<% end %>
+
+<% if @google_client_id -%>
 GOOGLE_CLIENT_ID = '<%= @google_client_id %>'
 GOOGLE_CLIENT_SECRET = '<%= @google_client_secret %>'
+<% end %>
+
+<% if @github_app_id && @github_api_secret -%>
+GITHUB_APP_ID = '<%= @github_app_id %>'
+GITHUB_APP_ID = '<%= @github_api_secret %>'
+GITHUB_EXTENDED_PERMISSIONS = ['repo']
+<% end %>
+
+<% if @asana_client_id && @asana_client_secret -%>
+ASANA_CLIENT_ID = '<%= @asana_client_id %>'
+ASANA_CLIENT_SECRET = '<%= @asana_client_secret %>'
+<% end %>
+
+<% if @visualstudio_app_id && @visualstudio_app_secret && @visualstudio_client_secret -%>
+VISUALSTUDIO_APP_ID = '<%= @visualstudio_app_id %>'
+VISUALSTUDIO_APP_SECRET = '<%= @visualstudio_app_secret %>'
+VISUALSTUDIO_CLIENT_SECRET = '<%= @visualstudio_client_secret %>'
+VISUALSTUDIO_SCOPES = ['vso.project', 'vso.work_write']
 <% end %>
