@@ -2,6 +2,13 @@
 
 This file is used to list changes made in each version of sentry.
 
+## 0.4.5 (2018-06-18)
+
+* Fixed the GITHUB_API_SECRET parameter. (Nilanjan Roy) 
+  [#24](https://github.com/JonathanTron/chef-sentry/pull/24)
+* Added required configuration while using reverse proxy. (Nilanjan Roy)
+  [#25](https://github.com/JonathanTron/chef-sentry/pull/25)
+
 ## 0.4.4 (2017-09-29)
 
 * Allow configuration of sentry-plugins SSOs
