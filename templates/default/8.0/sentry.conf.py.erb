@@ -136,10 +136,12 @@ SENTRY_FILESTORE_OPTIONS = <%= python_hash_string @filestore_options %>
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+USE_X_FORWARDED_HOST = True
 <% else %>
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
+# USE_X_FORWARDED_HOST = True
 <% end %>
 
 # If you're not hosting at the root of your web server,
