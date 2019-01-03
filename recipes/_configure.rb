@@ -32,29 +32,8 @@ directory node["sentry"]["env_d_path"] do
 end
 
 sentry_env_path = node["sentry"]["env_path"]
-if node["sentry"]["use_encrypted_data_bag"]
-  secret = if node["sentry"]["data_bag_secret"]
-    Chef::EncryptedDataBagItem.load_secret("#{node["sentry"]["data_bag_secret"]}")
-  else
-    nil
-  end
-  sentry_config = Chef::EncryptedDataBagItem.load(
-    node["sentry"]["data_bag"],
-    node["sentry"]["data_bag_item"],
-    secret
-  )
-else
-  sentry_config = data_bag_item(
-    node["sentry"]["data_bag"],
-    node["sentry"]["data_bag_item"]
-  )
-end
 
-Chef::Application.fatal!(
-  "Could not find " +
-  "item: #{node["sentry"]["data_bag_item"]} " +
-  "in databag #{node["sentry"]["data_bag"]}"
-) unless sentry_config
+sentry_config = data_bag_item(node["sentry"]["data_bag"], node["sentry"]["data_bag_item"])
 
 directory sentry_env_path do
   owner "root"
