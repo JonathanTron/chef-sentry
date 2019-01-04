@@ -4,8 +4,8 @@ This file is used to list changes made in each version of sentry.
 
 ## 0.5.0 (2018-06-18)
 
-* Updating Sentry to the lastest version [@oscar123mendoza](https://github.com/oscar123mendoza)
-* Revoving old data bag syntax [#24](https://github.com/JonathanTron/chef-sentry/pull/26)
+* Updating Sentry to the lastest version
+* Revoving old data bag syntax [#24](https://github.com/JonathanTron/chef-sentry/pull/26)[@oscar123mendoza](https://github.com/oscar123mendoza)
 
 ## 0.4.5 (2018-06-18)
 
