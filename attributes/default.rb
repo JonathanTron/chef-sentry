@@ -28,6 +28,13 @@ default["sentry"]["plugins"] = [
   ["django-bcrypt", "0.9.2"],
   ["django-sendmail-backend", "0.1.2"],
 ]
+if Gem::Version.new(node['sentry']['version']) < Gem::Version.new('8.0')
+  # pin some necessary packages so that database migration on older versions can work
+  # The sentry team did not backport these dependency changes so gotta install it manually
+  default['sentry']['plugins'] << ['django-jsonfield', '0.9.13'] # https://github.com/getsentry/sentry/issues/1648
+  default['sentry']['plugins'] << ['kombu', '3.0.37'] # similar issue
+end
+
 # dependencies per: https://docs.getsentry.com/on-premise/server/installation/python/
 default["sentry"]["dependency"]["packages"] = [
   "python-dev",
